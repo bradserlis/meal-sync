@@ -6,8 +6,7 @@ import Home from './src/containers/Home';
 const App = () => {
   return (
     <View style={styles.container}>
-      <Text>Ooga Booga</Text>
-      <Home />
+    <Home />
     </View>
   );
 }
