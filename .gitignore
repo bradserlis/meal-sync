@@ -1,5 +1,8 @@
 tsconfig.json
 babel.config.js
+.expo
+.expo/*
+
 
 # OSX
 #
@@ -38,7 +41,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
-yarn.lock # include if you are using npm - don't use both npm and yarn
+yarn.lock
 
 # BUCK
 buck-out/

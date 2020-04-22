@@ -1,23 +1,15 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { View, Text, Button, SafeAreaView } from 'react-native';
 
-import Home from './src/containers/Home';
+import Router from './src/Navigation/Router';
+import Landing from './src/Landing/Landing';
 
 const App = () => {
   return (
-    <View style={styles.container}>
-    <Home />
-    </View>
+    <SafeAreaView style={{flex: 1}}>
+    <Router />
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;
