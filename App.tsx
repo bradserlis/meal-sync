@@ -1,10 +1,10 @@
-import React, { useReducer, useEffect, useMemo, createContext } from 'react';
+import React, { useEffect, createContext, useReducer, useMemo } from 'react';
 import { View, Text, Button, SafeAreaView, AsyncStorage } from 'react-native';
 
 import Router from './src/Navigation/Router';
 import Landing from './src/Landing/Landing';
 
-const AuthContext = React.createContext();
+const AuthContext = createContext();
 
 const App = ({ navigation }) => {
 
@@ -82,9 +82,7 @@ const App = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <AuthContext.Provider value={authContext}>
         <Router />
-      </AuthContext.Provider>
     </SafeAreaView>
   );
 }
