@@ -1,12 +1,17 @@
 import React, { useState, useContext } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TextInput, Button } from 'react-native';
 
-const SignInScreen = () => {
+import authContext from '../../App';
+
+const SignInScreen = ({navigation}) => {
+
+  let handleSignIn = () => {
+    alert('whoo you signed in...sorta')
+    navigation.navigate('Home')
+  }
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const { signIn } = useContext(AuthContext);
 
   return (
     <View>
@@ -21,7 +26,7 @@ const SignInScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Sign in" onPress={() => signIn({ username, password })} />
+      <Button title="Sign in" onPress={handleSignIn} />
     </View>
   );
 }
