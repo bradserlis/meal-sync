@@ -81,9 +81,11 @@ const App = ({ navigation }) => {
     }), [])
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <AuthContext.Provider value={authContext}>
+      <SafeAreaView style={{ flex: 1 }}>
         <Router />
-    </SafeAreaView>
+      </SafeAreaView>
+    </AuthContext.Provider>
   );
 }
 
