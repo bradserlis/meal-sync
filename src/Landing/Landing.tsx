@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-
 import { Text, View, Button } from 'react-native';
+
+import SignInScreen from '../Navigation/SignInScreen'
 
 const Landing = ({navigation}) => {
   return (
@@ -10,7 +11,7 @@ const Landing = ({navigation}) => {
       </Text>
       <Button
       title='blah'
-      onPress={() => navigation.navigate('Details')}
+      onPress={() => navigation.navigate('SignInScreen')}
       >
       </Button>
     </View>

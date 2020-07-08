@@ -1,32 +1,22 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, { Component } from "react";
+import {
+  createSwitchNavigator, 
+  createAppContainer,
+} from "react-navigation";
 
-import Landing from '../Landing/Landing.tsx';
+import Landing from "../Landing/Landing";
+import SignInScreen from './SignInScreen';
+import MainTabNavigator from './MainTabNavigator';
 
-const DetailsScreen = () => {
-  return(
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-    </View>
-  )
-}
-
-const Stack = createStackNavigator();
-
-const Router = () => 
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen
-          name="Landing" 
-          component={Landing}
-          options={{
-            headerShown: false
-          }}
-           />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+const Router = createAppContainer(createSwitchNavigator(
+  {
+    Landing: Landing,
+    SignInScreen: SignInScreen,
+    // MainTabNavigator: MyNavigator
+  },
+  {
+    initialRouteName: "Landing"
+  }
+));
 
 export default Router;
