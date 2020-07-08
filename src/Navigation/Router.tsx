@@ -1,20 +1,22 @@
 import React, { Component } from "react";
 import {
-  createSwitchNavigator
+  createSwitchNavigator, 
+  createAppContainer,
 } from "react-navigation";
 
-import App from "../../App";
-import MessagesIndividual from "../../messages/components/MessagesIndividual";
-import { Text, View, ImageBackground } from "react-native";
+import Landing from "../Landing/Landing";
+import SignInScreen from './SignInScreen';
+import MainTabNavigator from './MainTabNavigator';
 
-const Router = createSwitchNavigator(
+const Router = createAppContainer(createSwitchNavigator(
   {
     Landing: Landing,
+    SignInScreen: SignInScreen,
     // MainTabNavigator: MyNavigator
   },
   {
     initialRouteName: "Landing"
   }
-);
+));
 
 export default Router;
