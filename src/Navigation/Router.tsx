@@ -12,7 +12,7 @@ const Router = createAppContainer(createSwitchNavigator(
   {
     Landing: Landing,
     SignInScreen: SignInScreen,
-    // MainTabNavigator: MyNavigator
+    MainTabNavigator: MainTabNavigator
   },
   {
     initialRouteName: "Landing"

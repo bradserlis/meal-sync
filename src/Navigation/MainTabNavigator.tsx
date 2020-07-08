@@ -1,14 +1,11 @@
-import React from "react";
+import React from 'react';
+import Icon from 'react-native'
 import { Platform } from "react-native";
-import { Icon } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
-import Router from "./Router";
-import Landing from "../../login/containers/Landing";
-import Home from "../../profile/containers/Home";
-import Nearby from "../../nearby/containers/Nearby";
-import Messages from "../../messages/containers/Messages";
-import Connections from "../../connections/containers/Connections";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+
+import Home from '../Profile/containers/Home';
+import Router from "./Router";
 
 export default (MainTabNavigator = createMaterialBottomTabNavigator(
   {
@@ -16,16 +13,16 @@ export default (MainTabNavigator = createMaterialBottomTabNavigator(
       screen: Home,
       title: "Profile"
     },
-    Nearby: {
-      screen: Nearby,
-      title: "Nearby"
-    },
-    Connections: {
-      screen: Connections
-    },
-    Messages: {
-      screen: Messages
-    }
+    // Nearby: {
+    //   screen: Nearby,
+    //   title: "Nearby"
+    // },
+    // Connections: {
+    //   screen: Connections
+    // },
+    // Messages: {
+    //   screen: Messages
+    // }
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -35,13 +32,13 @@ export default (MainTabNavigator = createMaterialBottomTabNavigator(
         if (routeName === "Home") {
           iconName = "ios-contact";
           backBehavior: "none";
-        } else if (routeName === "Connections") {
+        } /*else if (routeName === "Connections") {
           iconName = "ios-chatboxes";
         } else if (routeName === "Nearby") {
           iconName = "ios-people";
         } else if (routeName === "Messages") {
           iconName = "ios-chatbubbles";
-        }
+        }*/
         return <Icon name={iconName} size={2} style={{ marginBottom: -2.5 }} />;
       }
     }),
