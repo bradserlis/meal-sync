@@ -1,10 +1,19 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Paragraph, Title, Divider, Headline, Text, Button} from 'react-native-paper'
+
+import {globalStyles} from '../../globalStyles'
 
 const Home = (props) => {
+
+  const {navigate} = props.navigation;
+
   return(
-    <View>
-    <Text> HOME REACHED! </Text>
+    <View style={globalStyles.container}>
+    <View style={globalStyles.dividerDiv}>
+      <Headline> Home </Headline>
+    </View>
+      <Paragraph> Now that you are logged in, let's start swiping on food... </Paragraph>
     </View>
     )
 }
