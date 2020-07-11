@@ -39,7 +39,7 @@ export default (MainTabNavigator = createMaterialBottomTabNavigator(
         } else if (routeName === "Messages") {
           iconName = "ios-chatbubbles";
         }*/
-        return <Icon name={iconName} size={2} style={{ marginBottom: -2.5 }} />;
+        return <Icon name={iconName} size={2} style={{ marginBottom: -10.5 }} />;
       }
     }),
     // tabBarComponent: react-navigation-tabs,
