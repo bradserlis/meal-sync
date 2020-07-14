@@ -9,8 +9,10 @@ import { globalStyles } from '../globalStyles'
 const SignInScreen = ({navigation}) => {
 
   let handleSignIn = () => {
-    alert('whoo you signed in...sorta')
-    navigation.navigate('Home')
+    firebase.auth().signInWithEmailAndPassword(email, password).then((response) => {
+      alert('signed in properly!');
+      navigation.navigate('Home')
+    })
   }
 
   const [email, setEmail] = useState('');
