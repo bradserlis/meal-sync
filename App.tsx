@@ -21,11 +21,11 @@ firebase.initializeApp(firebaseconfig);
 const App = () => {
 
   return (
-      <SafeAreaView style={{ display: 'flex', flex: 1 }}>
+    <SafeAreaView style={{ display: 'flex', flex: 1 }}>
       <PaperProvider>
         <Router />
-        </PaperProvider>
-      </SafeAreaView>
+      </PaperProvider>
+    </SafeAreaView>
   );
 }
 

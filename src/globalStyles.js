@@ -8,6 +8,12 @@ export const padding = {
     xl: 40
   }
 
+export const fonts = {
+  sm: 12,
+  md: 18,
+  lg: 28,
+}
+
 export const dimensions = {
   fullHeight: Dimensions.get('window').height,
   fullWidth: Dimensions.get('window').width
