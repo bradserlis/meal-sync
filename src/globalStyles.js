@@ -1,11 +1,23 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+export const padding = {
+    sm: 10,
+    md: 20,
+    lg: 30,
+    xl: 40
+  }
+
+export const dimensions = {
+  fullHeight: Dimensions.get('window').height,
+  fullWidth: Dimensions.get('window').width
+}
 
 export const globalStyles = StyleSheet.create({
   container: {
-    display: 'flex',
-    flex: 1,
-    alignItems: 'center',
+    paddingHorizontal: padding.md,
+    paddingVertical: padding.lg,
+    width: dimensions.fullWidth,
   },
   dividerDiv: {
     width: '100%',

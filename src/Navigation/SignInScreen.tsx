@@ -1,7 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import { TextInput, Text, Button } from 'react-native-paper';
+import * as firebase from 'firebase';
 
 import authContext from '../../App';
+import { globalStyles } from '../globalStyles'
 
 const SignInScreen = ({navigation}) => {
 
@@ -10,15 +13,15 @@ const SignInScreen = ({navigation}) => {
     navigation.navigate('Home')
   }
 
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <View>
+    <View style={globalStyles.container}>
       <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
       />
       <TextInput
         placeholder="Password"
@@ -26,7 +29,10 @@ const SignInScreen = ({navigation}) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Sign in" onPress={handleSignIn} />
+      <Button onPress={handleSignIn} 
+      >
+      Sign In
+      </Button>
     </View>
   );
 }
