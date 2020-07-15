@@ -26,6 +26,7 @@ const hideDialog = () => setDialogVisibility(false);
       firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password).then((result) => {
         if(result.user.uid !== null){
           firebase.database().ref('users').child(result.user.uid).child('displayName').set(displayName)
+          navigation.navigate('Home');
         }
       }).catch((error) => {
           switch(error.code){

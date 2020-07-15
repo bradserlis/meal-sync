@@ -11,7 +11,7 @@ const Landing = ({navigation}) => {
     <View style={[globalStyles.container, styles.centered]}>
       <View style={styles.box}>
         <Headline style={{alignSelf:'center', marginBottom: 20}}>
-          Landing Page Text
+          Meal Sync
         </Headline>
         <View style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
           <Button
