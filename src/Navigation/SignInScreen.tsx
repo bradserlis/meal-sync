@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Keyboard } from 'react-native';
+import { View, Keyboard, StyleSheet } from 'react-native';
 import { TextInput, Button, Headline, Portal, Dialog, Paragraph } from 'react-native-paper';
 import * as firebase from 'firebase';
 
 import authContext from '../../App';
+import Landing from '../Landing/Landing'
 import { globalStyles } from '../globalStyles'
 
 const SignInScreen = ({navigation}) => {
@@ -58,7 +59,7 @@ const SignInScreen = ({navigation}) => {
   const hideDialog = () => setDialogVisibility(false);
 
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container, styles.flexed]}>
       <Headline>Sign In</Headline>
       <TextInput
         label='Enter Email'
@@ -93,8 +94,27 @@ const SignInScreen = ({navigation}) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+      <View style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
+        <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end'}}>
+        <Button
+          style={{display: 'flex', alignSelf: 'center', alignItems: 'center'}}
+          mode='outlined'
+          dark={true}
+          onPress={() => navigation.navigate('Landing')}
+        >
+        Go Back
+        </Button>
+        </View>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  flexed: {
+    display: 'flex',
+    flex: 1,
+  }
+})
 
 export default SignInScreen;
