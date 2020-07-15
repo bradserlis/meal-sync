@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { TextInput, Text, Button } from 'react-native-paper';
+import { TextInput, Button, Headline } from 'react-native-paper';
 import * as firebase from 'firebase';
 
 import authContext from '../../App';
@@ -44,18 +44,26 @@ const SignInScreen = ({navigation}) => {
 
   return (
     <View style={globalStyles.container}>
+      <Headline>Sign In</Headline>
       <TextInput
+        label='Enter Email'
+        mode='outlined'
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
+        label='Enter Password'
+        mode='outlined'
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button onPress={handleSignIn} 
+      <Button
+       style={{marginTop: 10}}
+       mode='contained'
+       onPress={handleSignIn} 
       >
       Sign In
       </Button>
