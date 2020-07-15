@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { TextInput, Button, Headline } from 'react-native-paper';
+import { View, Keyboard } from 'react-native';
+import { TextInput, Button, Headline, Portal, Dialog, Paragraph } from 'react-native-paper';
 import * as firebase from 'firebase';
 
 import authContext from '../../App';
@@ -16,19 +16,29 @@ const SignInScreen = ({navigation}) => {
       }).catch(error => {
         switch(error.code){
           case 'auth/user-not-found':
-            alert('No user found. Please check your details and try again')
+            Keyboard.dismiss()
+            setDialogMessage('No user found. Please check your details and try again')
+            setDialogVisibility(true)
             break;
           case 'auth/wrong-password':
-            alert('Your password is incorrect')
+            Keyboard.dismiss()
+            setDialogMessage('Your password is incorrect')
+            setDialogVisibility(true)
             break;
           case 'auth/invalid-email':
-            alert('The email entered is not formatted correctly - "me@something.com"')
+            Keyboard.dismiss()
+            setDialogMessage('The email entered is not formatted correctly - "me@something.com"')
+            setDialogVisibility(true)
             break;
           case 'auth/user-disabled':
-            alert('Your account is currently disabled')
+            Keyboard.dismiss()
+            setDialogMessage('Your account is currently disabled') 
+            setDialogVisibility(true)
             break;
           default:
-            alert('Something has gone wrong. Please try again.')
+            Keyboard.dismiss()
+            setDialogMessage('Something has gone wrong. Please try again.')
+            setDialogVisibility(true)
             break;
         }
       }) 
@@ -41,6 +51,11 @@ const SignInScreen = ({navigation}) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [dialogVisibility, setDialogVisibility] = useState(false)
+  const [dialogMessage, setDialogMessage] = useState('')
+
+  const showDialog = () => setDialogVisibility(true);
+  const hideDialog = () => setDialogVisibility(false);
 
   return (
     <View style={globalStyles.container}>
@@ -67,6 +82,17 @@ const SignInScreen = ({navigation}) => {
       >
       Sign In
       </Button>
+      <Portal>
+        <Dialog visible={dialogVisibility} onDismiss={hideDialog}>
+          <Dialog.Title>Alert</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>{dialogMessage}</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 }
