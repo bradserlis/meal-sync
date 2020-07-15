@@ -19,20 +19,33 @@ const [password, setPassword] = useState('');
 
     try {
       firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password).then((result) => {
-        if(result.user.uid){
+        if(result.user.uid !== null){
           firebase.database().ref('users').child(result.user.uid).child('displayName').set(displayName)
-          alert('it worketh')
         }
-      })
+      }).catch((error) => {
+          switch(error.code){
+            case 'auth/email-already-in-use':
+              alert('Email address is already in use. Sign in instead!')
+              break;
+            case 'auth/weak-password':
+              alert(error.message)
+              break;
+            case 'auth/invalid-email':
+              alert('The email entered is not formatted correctly - "me@something.com"')
+              break;
+            default:
+              alert('Something has gone wrong. Please try again.')
+              break;
+          }
+        })
     }
     catch(e){
-      alert('it faileth')
       console.log(e)
     }
   }
 
     return(
-      <View style={globalStyles.container}>
+      <View style={[globalStyles.container, globalStyles.flexed]}>
         <Headline>Sign Up</Headline>
         <TextInput
           label='Enter Email'
@@ -59,11 +72,24 @@ const [password, setPassword] = useState('');
           > 
         </TextInput>
         <Button
+          style={{marginTop: 10}}
           mode={'contained'} 
           onPress={onSubmit}
         >
         Sign Up
         </Button>
+        <View style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
+        <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end'}}>
+        <Button
+          style={{display: 'flex', alignSelf: 'center', alignItems: 'center'}}
+          mode='outlined'
+          dark={true}
+          onPress={() => navigation.navigate('Landing')}
+        >
+        Go Back
+        </Button>
+        </View>
+      </View>
     </View>
     )
 }
