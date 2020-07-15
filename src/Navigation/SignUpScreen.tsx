@@ -45,7 +45,7 @@ const [password, setPassword] = useState('');
   }
 
     return(
-      <View style={globalStyles.container}>
+      <View style={[globalStyles.container, globalStyles.flexed]}>
         <Headline>Sign Up</Headline>
         <TextInput
           label='Enter Email'
@@ -78,6 +78,18 @@ const [password, setPassword] = useState('');
         >
         Sign Up
         </Button>
+        <View style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
+        <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end'}}>
+        <Button
+          style={{display: 'flex', alignSelf: 'center', alignItems: 'center'}}
+          mode='outlined'
+          dark={true}
+          onPress={() => navigation.navigate('Landing')}
+        >
+        Go Back
+        </Button>
+        </View>
+      </View>
     </View>
     )
 }

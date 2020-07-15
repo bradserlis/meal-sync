@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Keyboard, StyleSheet } from 'react-native';
+import { View, Keyboard } from 'react-native';
 import { TextInput, Button, Headline, Portal, Dialog, Paragraph } from 'react-native-paper';
 import * as firebase from 'firebase';
 
@@ -59,7 +59,7 @@ const SignInScreen = ({navigation}) => {
   const hideDialog = () => setDialogVisibility(false);
 
   return (
-    <View style={[globalStyles.container, styles.flexed]}>
+    <View style={[globalStyles.container, globalStyles.flexed]}>
       <Headline>Sign In</Headline>
       <TextInput
         label='Enter Email'
@@ -109,12 +109,5 @@ const SignInScreen = ({navigation}) => {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  flexed: {
-    display: 'flex',
-    flex: 1,
-  }
-})
 
 export default SignInScreen;

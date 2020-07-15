@@ -25,6 +25,10 @@ export const globalStyles = StyleSheet.create({
     paddingVertical: padding.lg,
     width: dimensions.fullWidth,
   },
+  flexed: {
+   display: 'flex',
+   flex: 1,
+  },
   dividerDiv: {
     width: '100%',
     alignItems: 'center',
