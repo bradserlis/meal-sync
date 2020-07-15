@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { Text, Headline, TextInput, Button } from 'react-native-paper';
+import { View, Keyboard } from 'react-native';
+import { Text, Headline, TextInput, Button, Paragraph, Portal, Dialog } from 'react-native-paper';
 import * as firebase from 'firebase';
 
 import { globalStyles } from '../globalStyles'
@@ -9,6 +9,11 @@ const SignUpScreen = ({navigation}) => {
 const [email, setEmail] = useState('');
 const [displayName, setDisplayName] = useState('')
 const [password, setPassword] = useState('');
+const [dialogVisibility, setDialogVisibility] = useState(false)
+const [dialogMessage, setDialogMessage] = useState('')
+
+const showDialog = () => setDialogVisibility(true);
+const hideDialog = () => setDialogVisibility(false);
 
   const onSubmit = () => {
 
@@ -25,16 +30,24 @@ const [password, setPassword] = useState('');
       }).catch((error) => {
           switch(error.code){
             case 'auth/email-already-in-use':
-              alert('Email address is already in use. Sign in instead!')
+              Keyboard.dismiss();
+              setDialogMessage('Email address is already in use. Sign in instead!')
+              setDialogVisibility(true)
               break;
             case 'auth/weak-password':
-              alert(error.message)
+              Keyboard.dismiss();
+              setDialogMessage(error.message)
+              setDialogVisibility(true)
               break;
             case 'auth/invalid-email':
-              alert('The email entered is not formatted correctly - "me@something.com"')
+              Keyboard.dismiss();
+              setDialogMessage('The email entered is not formatted correctly - "me@something.com"')
+              setDialogVisibility(true)
               break;
             default:
-              alert('Something has gone wrong. Please try again.')
+              Keyboard.dismiss()
+              setDialogMessage('Something has gone wrong. Please try again.')
+              setDialogVisibility(true)
               break;
           }
         })
@@ -78,6 +91,17 @@ const [password, setPassword] = useState('');
         >
         Sign Up
         </Button>
+        <Portal>
+        <Dialog visible={dialogVisibility} onDismiss={hideDialog}>
+          <Dialog.Title>Alert</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>{dialogMessage}</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
         <View style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
         <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end'}}>
         <Button
