@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   createSwitchNavigator, 
   createAppContainer,
@@ -17,7 +17,7 @@ const Router = createAppContainer(createSwitchNavigator(
     MainTabNavigator: MainTabNavigator
   },
   {
-    initialRouteName: "Landing"
+    initialRouteName: "MainTabNavigator"
   }
 ));
 
