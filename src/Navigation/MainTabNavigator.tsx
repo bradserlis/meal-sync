@@ -6,6 +6,7 @@ import { createMaterialBottomTabNavigator } from "react-navigation-material-bott
 
 import Home from '../Profile/containers/Home';
 import Connections from '../Connections/containers/Connections';
+import MealSync from '../MealSync/containers/MealSync';
 
 export default (MainTabNavigator = createMaterialBottomTabNavigator(
   {
@@ -17,9 +18,10 @@ export default (MainTabNavigator = createMaterialBottomTabNavigator(
       screen: Connections,
       title: "Connections"
     },
-    // Connections: {
-    //   screen: Connections
-    // },
+    MealSync: {
+      screen: MealSync,
+      title: "Meal Sync"
+    },
     // Messages: {
     //   screen: Messages
     // }
