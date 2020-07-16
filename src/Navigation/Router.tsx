@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   createSwitchNavigator, 
   createAppContainer,
 } from "react-navigation";
 
 import Landing from "../Landing/Landing";
-import SignInScreen from './SignInScreen';
-import SignUpScreen from './SignUpScreen';
+import SignInScreen from '../Auth/SignInScreen';
+import SignUpScreen from '../Auth/SignUpScreen';
 import MainTabNavigator from './MainTabNavigator';
 
 const Router = createAppContainer(createSwitchNavigator(
@@ -17,7 +17,7 @@ const Router = createAppContainer(createSwitchNavigator(
     MainTabNavigator: MainTabNavigator
   },
   {
-    initialRouteName: "Landing"
+    initialRouteName: "MainTabNavigator"
   }
 ));
 

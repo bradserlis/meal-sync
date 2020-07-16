@@ -3,10 +3,10 @@ import { View } from 'react-native';
 import { Paragraph, Title, Divider, Headline, Text, Button} from 'react-native-paper'
 import * as firebase from 'firebase'
 
-import {globalStyles} from '../../globalStyles'
+import {globalStyles} from '../../globalStyles';
 
 const Home = (props) => {
-
+  
   const {navigate} = props.navigation;
 
   return(
