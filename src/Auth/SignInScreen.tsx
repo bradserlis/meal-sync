@@ -85,7 +85,7 @@ const SignInScreen = ({navigation}) => {
       </Button>
       <Portal>
         <Dialog visible={dialogVisibility} onDismiss={hideDialog}>
-          <Dialog.Title>Alert</Dialog.Title>
+          <Dialog.Title>Oops...</Dialog.Title>
           <Dialog.Content>
             <Paragraph>{dialogMessage}</Paragraph>
           </Dialog.Content>

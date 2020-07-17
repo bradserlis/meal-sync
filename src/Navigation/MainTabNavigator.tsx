@@ -1,48 +1,42 @@
 import React from 'react';
-import Icon from 'react-native'
-import { Platform } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import Home from '../Profile/containers/Home';
-import Router from "./Router";
+import Connections from '../Connections/containers/Connections';
+import MealSync from '../MealSync/containers/MealSync';
 
-export default (MainTabNavigator = createMaterialBottomTabNavigator(
+export default (MainTabNavigator = createBottomTabNavigator(
   {
-    Home: {
-      screen: Home,
-      title: "Profile"
-    },
-    // Nearby: {
-    //   screen: Nearby,
-    //   title: "Nearby"
-    // },
-    // Connections: {
-    //   screen: Connections
-    // },
-    // Messages: {
-    //   screen: Messages
-    // }
+    Home,
+    Connections,
+    MealSync,
   },
   {
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarOptions: {
+        labelStyle: {
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
+        activeTintColor: 'rgb(0, 120, 220)',
+        inactiveTintColor: '#444',
+      },
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
         let iconName;
+        const color = focused ? 'rgb(0,120,220)' : '#444'
         if (routeName === "Home") {
           iconName = "ios-contact";
           backBehavior: "none";
-        } /*else if (routeName === "Connections") {
-          iconName = "ios-chatboxes";
-        } else if (routeName === "Nearby") {
-          iconName = "ios-people";
-        } else if (routeName === "Messages") {
-          iconName = "ios-chatbubbles";
-        }*/
-        return <Ionicons name={iconName} size={2} style={{ marginBottom: -10.5 }} />;
+        } else if (routeName === "Connections") {
+          iconName = "md-contacts";
+        } else if (routeName === "MealSync") {
+          iconName = "ios-restaurant";
+        } 
+        return <Ionicons name={iconName} size={28} color={color} />;
       }
     }),
-    // tabBarComponent: react-navigation-tabs,
     initialRouteName: "Home",
     tabBarPosition: "bottom",
     animationEnabled: true,
