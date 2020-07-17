@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Paragraph, Title, Divider, Headline, Text, Button} from 'react-native-paper'
 import * as firebase from 'firebase'
@@ -7,14 +7,21 @@ import {globalStyles} from '../../globalStyles';
 
 const Home = (props) => {
 
-  const [randomId, setRandomId] = useState('')
+  const [userId] = useState(firebase.auth().currentUser.uid)
+  const [connectionId, setConnectionId] = useState('')
+  
+  useEffect(() => {
+    firebase
+    .database()
+    .ref("/users/" + userId)
+    .child("connectionId")
+    .once("value")
+    .then(snapshot => {
+      setConnectionId(snapshot.val())
+    })
+  },[connectionId])
   
   const {navigate} = props.navigation;
-  // let connectionId = firebase.auth().currentUser.uid
-
-  const assignRandomId = () => {
-    setRandomId(Math.floor(Math.random()*900000) + 100000)
-  }
 
   return(
     <View style={globalStyles.container}>
@@ -22,14 +29,8 @@ const Home = (props) => {
       <Headline> Home </Headline>
     </View>
       <Paragraph> Now that you are logged in, let's start swiping on food... </Paragraph>
-      <Button
-        onPress={assignRandomId}
-        mode={'contained'}
-        >
-        Create test user
-      </Button>
       <View style={globalStyles.footerStyle}>
-        <Paragraph> Your Connection ID: {randomId}</Paragraph>
+        <Paragraph> Your Connection ID: {connectionId}</Paragraph>
       </View>
     </View>
     )
