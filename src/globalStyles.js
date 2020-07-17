@@ -24,10 +24,18 @@ export const globalStyles = StyleSheet.create({
     paddingHorizontal: padding.md,
     paddingVertical: padding.lg,
     width: dimensions.fullWidth,
+    height: '100%'
   },
   flexed: {
    display: 'flex',
    flex: 1,
+  },
+  footerStyle: {
+    display: 'flex',
+    flex: 1,
+    alignContent: 'flex-end',
+    alignSelf: 'center',
+    justifyContent: 'flex-end'
   },
   dividerDiv: {
     width: '100%',
