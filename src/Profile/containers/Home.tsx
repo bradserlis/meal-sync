@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Paragraph, Title, Divider, Headline, Text, Button} from 'react-native-paper'
+import { 
+  Paragraph, 
+  Title, 
+  Divider, 
+  Headline, 
+  Text, 
+  Button, 
+  Surface
+  } from 'react-native-paper'
 import * as firebase from 'firebase'
 
 import {globalStyles} from '../../globalStyles';
@@ -30,10 +38,19 @@ const Home = (props) => {
     </View>
       <Paragraph> Now that you are logged in, let's start swiping on food... </Paragraph>
       <View style={globalStyles.footerStyle}>
-        <Paragraph> Your Connection ID: {connectionId}</Paragraph>
+      <Surface style={styles.surface}>
+        <Paragraph style={{fontSize: 18, fontWeight: '400'}}> Your Connection ID: <Paragraph style={{fontWeight:'bold', fontSize: 18, letterSpacing: 2.2}}> {connectionId} </Paragraph></Paragraph>
+        </Surface>
       </View>
     </View>
     )
 }
+
+const styles = StyleSheet.create({
+  surface: {
+    padding: 15,
+    elevation: 4,
+  },
+});
 
 export default Home;
