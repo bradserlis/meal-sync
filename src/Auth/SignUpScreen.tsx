@@ -15,6 +15,13 @@ const [dialogMessage, setDialogMessage] = useState('')
 const showDialog = () => setDialogVisibility(true);
 const hideDialog = () => setDialogVisibility(false);
 
+let createConnectionId = () => {
+  let setOne = (Math.floor(Math.random()*9000) + 1000)
+  let setTwo = (Math.floor(Math.random()*9000) + 1000)
+
+  return (setOne + '-' + setTwo)
+}
+
   const onSubmit = () => {
 
     let userObj = {
@@ -23,9 +30,11 @@ const hideDialog = () => setDialogVisibility(false);
     }
 
     try {
+      let connectionId: string = createConnectionId()
       firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password).then((result) => {
         if(result.user.uid !== null){
           firebase.database().ref('users').child(result.user.uid).child('displayName').set(displayName)
+          firebase.database().ref('users').child(result.user.uid).child('connectionId').set(connectionId)
           navigation.navigate('Home');
         }
       }).catch((error) => {
