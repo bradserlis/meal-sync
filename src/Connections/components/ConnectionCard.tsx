@@ -1,11 +1,10 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Title, Paragraph, Surface } from 'react-native-paper';
 
 const ConnectionCard = ({user}) => {
-  console.log('what is user', user)
   return(
-    <View style={{padding: 10, width: 350, alignSelf: 'center'}}>
+    <View style={styles.connectionCardStyle}>
       <Surface>
         <Title> {user.username} </Title>
         <Paragraph> Connection ID: {user.connectionId} </Paragraph>
@@ -13,5 +12,13 @@ const ConnectionCard = ({user}) => {
     </View>
     )
 }
+
+const styles = StyleSheet.create({
+  connectionCardStyle: {
+    padding: 10, 
+    width: 350, 
+    alignSelf: 'center'
+  }
+})
 
 export default ConnectionCard;

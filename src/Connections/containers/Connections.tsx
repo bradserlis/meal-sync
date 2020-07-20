@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, ScrollView, Text } from 'react-native'
+import { View, FlatList, ScrollView } from 'react-native'
 import { Headline, Paragraph, Button, Title,  } from 'react-native-paper';
 
 import { globalStyles } from '../../globalStyles';
-import ConnectionCard from '../components/ConnectionCard'
+import YourConnections from './YourConnections';
 
 const dummyData = [
   {
@@ -16,25 +16,20 @@ const dummyData = [
   }
 ];
 
-const Connections = ({navigation}) => {
+const Connections = ({ navigation }) => {
 
   const [connectionCards, setConnectionCards] = useState([])
 
   useEffect(() => {
     setConnectionCards(dummyData)
-  })
+  }, [connectionCards])
 
   return(
     <View style={globalStyles.container}>
       <View style={globalStyles.dividerDiv}>
         <Headline> Connections </Headline>
       </View>
-      <Title> Your Connections: </Title>
-      <ScrollView>
-      {connectionCards.map(user => {
-        return <ConnectionCard user={user}/>
-      })}
-      </ScrollView>
+      <YourConnections connections={connectionCards}/>
     </View>
     )
 }
