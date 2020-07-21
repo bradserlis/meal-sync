@@ -76,24 +76,21 @@ let createConnectionId = () => {
           placeholder='Email'
           value={email}
           onChangeText={setEmail}
-          > 
-        </TextInput>
+          /> 
         <TextInput
           label='Enter a Display Name'
           mode={'outlined'}
           placeholder='Display Name'
           value={displayName}
           onChangeText={setDisplayName}
-          > 
-        </TextInput>
+          /> 
         <TextInput
           label='Enter a Password'
           mode={'outlined'}
           placeholder='Password'
           value={password}
           onChangeText={setPassword}
-          > 
-        </TextInput>
+          /> 
         <Button
           style={{marginTop: 10}}
           mode={'contained'} 
