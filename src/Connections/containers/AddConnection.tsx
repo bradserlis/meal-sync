@@ -8,8 +8,11 @@ const AddConnection = () => {
 
   const [searchText, setSearchText] = useState('')
 
-  const onSubmit = () => alert('cool')
-  
+  const onSubmit = () => {
+    let formatter = searchText.slice(0, 4) + '-' + searchText.slice(4)
+    setSearchText(formatter)
+  }
+
   return(
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -20,10 +23,12 @@ const AddConnection = () => {
         <Title>Add Connection</Title>
         <TextInput 
         label='Connection ID'
-        mode={'outlined'}
-        placeholder='Connection ID'
+        mode={'flat'}
+        placeholder='0000-0000'
         value={searchText}
         onChangeText={setSearchText}
+        keyboardType={'numeric'}
+        maxLength={8}
         />
         <Button
           style={{marginTop: 10, display: 'flex', alignSelf: 'center', alignItems: 'center'}}
