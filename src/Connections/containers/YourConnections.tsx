@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import { Paragraph, Title, Headline } from 'react-native-paper';
 
-import { globalStyles } from '../../globalStyles'
+import { globalStyles, dimensions } from '../../globalStyles'
 import ConnectionCard from '../components/ConnectionCard';
 
 const YourConnections = ({connections}) => {
-
   return (
     <View style={globalStyles.flexed}>
       <Title> Your Connections: </Title>
@@ -19,5 +18,14 @@ const YourConnections = ({connections}) => {
   )
 }
 
+const styles = StyleSheet.create({
+  thinBorder: {
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'grey',
+    height: dimensions.fullHeight 
+  }
+})
 
 export default YourConnections;
