@@ -32,9 +32,13 @@ let createConnectionId = () => {
     try {
       let connectionId: string = createConnectionId()
       firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password).then((result) => {
+        firebase.auth().currentUser.updateProfile({
+          displayName
+        }).catch(function(error) {
+          alert(error)
+        })
         if(result.user.uid !== null){
-          firebase.database().ref('users').child(result.user.uid).child('displayName').set(displayName)
-          firebase.database().ref('users').child(result.user.uid).child('connectionId').set(connectionId)
+          firebase.database().ref('users').child(result.user.uid).set({displayName, connectionId, connections: ''})
           navigation.navigate('Home');
         }
       }).catch((error) => {
