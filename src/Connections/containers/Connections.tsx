@@ -36,18 +36,44 @@ const Connections = ({ navigation }) => {
   const [showDialog, setShowDialog] = useState(false)
   const [connectionSearchResults, setConnectionSearchResults] = useState('')
   const [userId] = useState(firebase.auth().currentUser.uid)
+  const [userDisplayName] = useState(firebase.auth().currentUser.displayName)
+  const [userConnectionId, setUserConnectionId] = useState('')
+
+  useEffect(() => {
+    firebase
+    .database()
+    .ref("/users/" + userId)
+    .child("connectionId")
+    .once("value", snapshot => {
+      setUserConnectionId(snapshot.val())
+    })
+  }, [userConnectionId])
 
   let toggleShowDialog = () => {
     setShowDialog(!showDialog)
   }
 
   let createConnection = (user) => {
-    setConnectionSearchResults(user)
-    console.log('sanity check - user', connectionSearchResults)
+    setConnectionSearchResults(user.toString())
+    console.log('sanity check - user', connectionSearchResults, typeof(connectionSearchResults))
   }
 
-  let addConnectionId = (user) => {
-    console.log('adding', connectionSearchResults, 'to', userId)
+  let addConnectionId = () => {
+    try {
+      firebase
+        .database()
+        .ref("users")
+        .orderByChild("connectionId")
+        .equalTo(connectionSearchResults)
+        .on("child_added", (snapshot) => {
+            firebase.database().ref("/users/" + userId).child("connections").child(snapshot.toJSON().displayName).set(connectionSearchResults)
+            firebase.database().ref("/users/" + snapshot.key).child("connections").child(userDisplayName).set(userConnectionId)
+        })
+        alert('Success')
+    } 
+    catch (e) {
+      alert(e)
+    }
     toggleShowDialog()
   }
 
