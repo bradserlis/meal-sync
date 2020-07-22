@@ -55,7 +55,6 @@ const Connections = ({ navigation }) => {
 
   let createConnection = (user) => {
     setConnectionSearchResults(user.toString())
-    console.log('sanity check - user', connectionSearchResults, typeof(connectionSearchResults))
   }
 
   let addConnectionId = () => {
