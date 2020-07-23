@@ -40,13 +40,9 @@ const Connections = ({ navigation }) => {
   const [userConnectionId, setUserConnectionId] = useState('')
 
   useEffect(() => {
-    firebase
-    .database()
-    .ref("/users/" + userId)
-    .child("connectionId")
-    .once("value", snapshot => {
-      setUserConnectionId(snapshot.val())
-    })
+    retrieveUserConnectionId();
+    setConnectionCards(dummyData);
+    retrieveConnections();
   }, [userConnectionId])
 
   let toggleShowDialog = () => {
@@ -55,6 +51,29 @@ const Connections = ({ navigation }) => {
 
   let createConnection = (user) => {
     setConnectionSearchResults(user.toString())
+  }
+
+  let retrieveUserConnectionId = () => {
+     firebase
+    .database()
+    .ref("/users/" + userId)
+    .child("connectionId")
+    .once("value", snapshot => {
+      setUserConnectionId(snapshot.val())
+    })
+  }
+
+  let retrieveConnections = () => {
+    let connectionsList = [];
+    firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
+      console.log('snapshot', snapshot.val())
+      snapshot.forEach((item) =>{
+        console.log('items', item.key, item.toJSON())
+        connectionsList.push({username: item.key, connectionId: item.toJSON()})
+      })
+    })
+    setConnectionCards(connectionsList)
+    console.log('result', connectionsList)
   }
 
   let addConnectionId = () => {
@@ -75,10 +94,6 @@ const Connections = ({ navigation }) => {
     }
     toggleShowDialog()
   }
-
-  useEffect(() => {
-    setConnectionCards(dummyData)
-  }, [connectionCards])
 
   return(
       <View style={globalStyles.container}>
