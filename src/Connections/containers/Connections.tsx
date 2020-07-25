@@ -41,9 +41,12 @@ const Connections = ({ navigation }) => {
 
   useEffect(() => {
     retrieveUserConnectionId();
-    setConnectionCards(dummyData);
-    retrieveConnections();
-  }, [userConnectionId])
+  }, [])
+
+  useEffect( () => {
+    console.log('call retrieve connections')
+    retrieveConnections();  
+  }, [])
 
   let toggleShowDialog = () => {
     setShowDialog(!showDialog)
@@ -63,17 +66,14 @@ const Connections = ({ navigation }) => {
     })
   }
 
-  let retrieveConnections = () => {
+  let retrieveConnections =  async () => {
     let connectionsList = [];
-    firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
-      console.log('snapshot', snapshot.val())
+     firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
       snapshot.forEach((item) =>{
-        console.log('items', item.key, item.toJSON())
         connectionsList.push({username: item.key, connectionId: item.toJSON()})
       })
-    })
     setConnectionCards(connectionsList)
-    console.log('result', connectionsList)
+    })
   }
 
   let addConnectionId = () => {
