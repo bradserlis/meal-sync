@@ -40,14 +40,13 @@ const Connections = ({ navigation }) => {
   const [userConnectionId, setUserConnectionId] = useState('')
 
   useEffect(() => {
-    firebase
-    .database()
-    .ref("/users/" + userId)
-    .child("connectionId")
-    .once("value", snapshot => {
-      setUserConnectionId(snapshot.val())
-    })
-  }, [userConnectionId])
+    retrieveUserConnectionId();
+  }, [])
+
+  useEffect( () => {
+    console.log('call retrieve connections')
+    retrieveConnections();  
+  }, [])
 
   let toggleShowDialog = () => {
     setShowDialog(!showDialog)
@@ -55,6 +54,26 @@ const Connections = ({ navigation }) => {
 
   let createConnection = (user) => {
     setConnectionSearchResults(user.toString())
+  }
+
+  let retrieveUserConnectionId = () => {
+     firebase
+    .database()
+    .ref("/users/" + userId)
+    .child("connectionId")
+    .once("value", snapshot => {
+      setUserConnectionId(snapshot.val())
+    })
+  }
+
+  let retrieveConnections =  async () => {
+    let connectionsList = [];
+     firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
+      snapshot.forEach((item) =>{
+        connectionsList.push({username: item.key, connectionId: item.toJSON()})
+      })
+    setConnectionCards(connectionsList)
+    })
   }
 
   let addConnectionId = () => {
@@ -75,10 +94,6 @@ const Connections = ({ navigation }) => {
     }
     toggleShowDialog()
   }
-
-  useEffect(() => {
-    setConnectionCards(dummyData)
-  }, [connectionCards])
 
   return(
       <View style={globalStyles.container}>
