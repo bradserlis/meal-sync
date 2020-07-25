@@ -10,7 +10,7 @@ const YourConnections = ({connections}) => {
     <View style={globalStyles.flexed}>
       <Title> Your Connections: </Title>
       <ScrollView>
-        {connections.length > 0 && connections.map(user => {
+        {connections && connections.map(user => {
           return <ConnectionCard user={user} key={user.connectionId}/>
         })}
     </ScrollView>
