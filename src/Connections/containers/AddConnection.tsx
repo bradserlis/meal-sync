@@ -15,9 +15,8 @@ const AddConnection = (props) => {
 
   const onSubmit = async () => {
     if(searchText.length === 9){
-      // let formatter = searchText.slice(0, 4) + '-' + searchText.slice(4)
-      // await setSearchText(formatter)
       props.createConnection(searchText)
+      props.setAddConnectionDialog(true)
       props.toggleShowDialog()
       setSearchText('')
     } else{
