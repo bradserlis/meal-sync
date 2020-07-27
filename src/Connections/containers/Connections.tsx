@@ -11,6 +11,8 @@ const Connections = ({ navigation }) => {
 
   const [connectionCards, setConnectionCards] = useState([])
   const [showDialog, setShowDialog] = useState(false)
+  const [addConnectionDialog, setAddConnectionDialog] = useState(false)
+  const [errorDialog, setErrorDialog] = useState(false)
   const [connectionSearchResults, setConnectionSearchResults] = useState('')
   const [userId] = useState(firebase.auth().currentUser.uid)
   const [userDisplayName] = useState(firebase.auth().currentUser.displayName)
@@ -26,6 +28,11 @@ const Connections = ({ navigation }) => {
 
   let toggleShowDialog = () => {
     setShowDialog(!showDialog)
+  }
+
+  let closeErrorDialog = () => {
+    setShowDialog(!showDialog)
+    setErrorDialog(false)
   }
 
   let createConnection = (user) => {
@@ -52,23 +59,33 @@ const Connections = ({ navigation }) => {
     })
   }
 
+  let checkForConnection = () => {
+    return connectionCards.some(connection => connection.connectionId === connectionSearchResults)
+  }
+
   let addConnectionId = () => {
-    try {
-      firebase
-        .database()
-        .ref("users")
-        .orderByChild("connectionId")
-        .equalTo(connectionSearchResults)
-        .on("child_added", (snapshot) => {
-            firebase.database().ref("/users/" + userId).child("connections").child(snapshot.toJSON().displayName).set(connectionSearchResults)
-            firebase.database().ref("/users/" + snapshot.key).child("connections").child(userDisplayName).set(userConnectionId)
-        })
+    setAddConnectionDialog(false)
+    if(!checkForConnection()){
+      try {
+        firebase
+          .database()
+          .ref("users")
+          .orderByChild("connectionId")
+          .equalTo(connectionSearchResults)
+          .on("child_added", (snapshot) => {
+              firebase.database().ref("/users/" + userId).child("connections").child(snapshot.toJSON().displayName).set(connectionSearchResults)
+              firebase.database().ref("/users/" + snapshot.key).child("connections").child(userDisplayName).set(userConnectionId)
+          })
+        toggleShowDialog()
         alert('Success')
-    } 
-    catch (e) {
-      alert(e)
+      } 
+      catch (e) {
+        alert(e)
+      } 
     }
-    toggleShowDialog()
+    else {
+      setErrorDialog(true)
+    }
   }
 
   return(
@@ -78,19 +95,39 @@ const Connections = ({ navigation }) => {
         </View>
         <Portal>
         <Dialog visible={showDialog} onDismiss={toggleShowDialog}>
-          <Dialog.Title>Confirm Connection</Dialog.Title>
+        { addConnectionDialog && (
+          <>
+            <Dialog.Title>Adding Connection</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>You are trying to add user: <Paragraph style={{fontWeight: 'bold'}}>{connectionSearchResults}</Paragraph></Paragraph>
+              <Paragraph>To continue, press Connect below</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button style={{margin: 5}} mode={'outlined'} onPress={addConnectionId}>Connect</Button>
+              <Button style={{margin: 5}} mode={'outlined'} onPress={toggleShowDialog}>Cancel</Button>
+            </Dialog.Actions>
+          </>
+          )
+        }
+        { errorDialog && (
+          <>
+          <Dialog.Title>Oops...</Dialog.Title>
           <Dialog.Content>
-            <Paragraph>You are trying to add user: <Paragraph style={{fontWeight: 'bold'}}>{connectionSearchResults}</Paragraph></Paragraph>
-            <Paragraph>To continue, press Connect below</Paragraph>
+            <Paragraph>You are trying to add user that you're already connected with.</Paragraph>
           </Dialog.Content>
-          <Dialog.Actions>
-            <Button style={{margin: 5}} mode={'outlined'} onPress={addConnectionId}>Connect</Button>
-            <Button style={{margin: 5}} mode={'outlined'} onPress={toggleShowDialog}>Cancel</Button>
+            <Dialog.Actions>
+              <Button style={{margin: 5}} mode={'outlined'} onPress={closeErrorDialog}>Confirm</Button>
           </Dialog.Actions>
+          </>
+          )}  
         </Dialog>
       </Portal>
-        <YourConnections connections={connectionCards}/>
-        <AddConnection toggleShowDialog={toggleShowDialog} createConnection={createConnection} />
+        <YourConnections connections={connectionCards} />
+        <AddConnection 
+          toggleShowDialog={toggleShowDialog} 
+          createConnection={createConnection} 
+          setAddConnectionDialog={setAddConnectionDialog}
+        />
       </View>
   )
 }
