@@ -7,29 +7,6 @@ import { globalStyles, dimensions } from '../../globalStyles';
 import YourConnections from './YourConnections';
 import AddConnection from './AddConnection'
 
-const dummyData = [
-  {
-    username: 'test person',
-    connectionId: '1234-5678'
-  },
-  {
-    username: 'test person 2',
-    connectionId: '2468-1357'
-  },
-  {
-    username: 'joe pera',
-    connectionId: '411'
-  },
-  {
-    username: 'spaghetti',
-    connectionId: 'N/A'
-  },
-  {
-    username: 'pasta pizza',
-    connectionId: 'tell em'
-  }
-];
-
 const Connections = ({ navigation }) => {
 
   const [connectionCards, setConnectionCards] = useState([])
@@ -44,7 +21,6 @@ const Connections = ({ navigation }) => {
   }, [])
 
   useEffect( () => {
-    console.log('call retrieve connections')
     retrieveConnections();  
   }, [])
 
