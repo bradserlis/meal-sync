@@ -3,7 +3,8 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Headline, Paragraph, Title, Button, Surface } from 'react-native-paper';
 
 import { globalStyles, dimensions } from '../../globalStyles'
-import MealSyncGroups from './MealSyncGroups'
+import MealSyncGroups from './MealSyncGroups';
+import CreateGroup from './CreateGroup';
 
 const MealSync = ({navigation}) => {
 
@@ -22,6 +23,7 @@ const MealSync = ({navigation}) => {
         <Title style={styles.buttonTextStyle}> Meal Sync Group</Title>
       </TouchableOpacity>
       <TouchableOpacity
+        onPress={() => navigation.navigate('CreateGroup')}
         style={styles.buttonStyle}
       >
       <Title style={[styles.buttonTextStyle, styles.buttonTextEmphasisStyle]}>Create New </Title>
@@ -43,7 +45,6 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     width: dimensions.fullWidth/2.5,
-    // maxWidth: dimensions.fullWidth/2.5, 
     backgroundColor:'skyblue', 
     height: 300, 
     justifyContent: 'center', 

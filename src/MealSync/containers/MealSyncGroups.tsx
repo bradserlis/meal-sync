@@ -8,12 +8,12 @@ import * as firebase from 'firebase'
 
 const MealSyncGroups = ({navigation}) => {
   
-  const [connectionCards, setConnectionCards] = useState([])
+  const [connectionCards, setConnectionCards] = useState([]);
   const [userId] = useState(firebase.auth().currentUser.uid);
 
   useEffect(() => {
     retrieveConnections()
-  })
+  }, [])
 
   let retrieveConnections =  async () => {
     let connectionsList = [];
