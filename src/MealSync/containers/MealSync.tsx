@@ -3,8 +3,10 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Headline, Paragraph, Title, Button, Surface } from 'react-native-paper';
 
 import { globalStyles, dimensions } from '../../globalStyles'
+import MealSyncGroups from './MealSyncGroups'
 
 const MealSync = ({navigation}) => {
+
   return(
     <View style={globalStyles.container}>
       <View style={globalStyles.dividerDiv}>
@@ -14,6 +16,7 @@ const MealSync = ({navigation}) => {
       <View style={{flex: 1, padding: 20, minWidth: dimensions.fullWidth/2, flexDirection:'row', justifyContent:'space-between'}}>
       <TouchableOpacity
         style={styles.buttonStyle}
+        onPress={() => navigation.navigate('MealSyncGroups')}
       >
         <Title style={[styles.buttonTextStyle, styles.buttonTextEmphasisStyle]}>Use Previous</Title>
         <Title style={styles.buttonTextStyle}> Meal Sync Group</Title>
@@ -29,22 +32,6 @@ const MealSync = ({navigation}) => {
     </View>
   )
 }
-
-
-          // <Button
-          //   labelStyle={styles.buttonStyle}
-          //   mode='contained'
-          //   onPress={() => navigation.navigate('SignInScreen')}
-          // >
-          // Use Previous Meal Sync Group
-          // </Button>
-          // <Button
-          //   labelStyle={styles.buttonStyle}
-          //   mode='contained'
-          //   onPress={() => navigation.navigate('SignUpScreen')}
-          // >
-          // Create Meal Sync Group
-          // </Button>
 
 const styles = StyleSheet.create({
   centered: {

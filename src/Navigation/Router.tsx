@@ -8,13 +8,15 @@ import Landing from "../Landing/Landing";
 import SignInScreen from '../Auth/SignInScreen';
 import SignUpScreen from '../Auth/SignUpScreen';
 import MainTabNavigator from './MainTabNavigator';
+import MealSyncGroups from '../MealSync/containers/MealSyncGroups'
 
 const Router = createAppContainer(createSwitchNavigator(
   {
     Landing: Landing,
     SignInScreen: SignInScreen,
     SignUpScreen: SignUpScreen,
-    MainTabNavigator: MainTabNavigator
+    MainTabNavigator: MainTabNavigator,
+    MealSyncGroups: MealSyncGroups,
   },
   {
     initialRouteName: "Landing"
