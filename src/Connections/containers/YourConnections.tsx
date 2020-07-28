@@ -13,7 +13,7 @@ const YourConnections = ({connections}) => {
         {connections && connections.map(user => {
           return <ConnectionCard user={user} key={user.connectionId}/>
         })}
-    </ScrollView>
+      </ScrollView>
     </View>
   )
 }
