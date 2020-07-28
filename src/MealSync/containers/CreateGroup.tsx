@@ -4,7 +4,7 @@ import { Headline, Title, Paragraph, Button } from 'react-native-paper';
 
 import {globalStyles} from '../../globalStyles'
 
-const CreateGroup = () => {
+const CreateGroup = ({navigation}) => {
 
   return(
     <View style={globalStyles.container}>
@@ -18,6 +18,7 @@ const CreateGroup = () => {
         Get Started
         </Button>
         <Button
+          onPress={() => navigation.navigate('MealSync')}
           mode={'contained'}
         >
         Go Back
