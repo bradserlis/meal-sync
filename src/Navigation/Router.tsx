@@ -21,7 +21,7 @@ const Router = createAppContainer(createSwitchNavigator(
     CreateGroup: CreateGroup,
   },
   {
-    initialRouteName: "Landing"
+    initialRouteName: "Landing",
   }
 ));
 

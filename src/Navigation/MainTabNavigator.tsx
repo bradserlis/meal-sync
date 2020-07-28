@@ -41,6 +41,6 @@ export default (MainTabNavigator = createBottomTabNavigator(
     tabBarPosition: "bottom",
     animationEnabled: true,
     swipeEnabled: false,
-    backBehavior: "none"
+    backBehavior: "true"
   }
 ));
