@@ -67,17 +67,25 @@ const Connections = ({ navigation }) => {
     setAddConnectionDialog(false)
     if(!checkForConnection()){
       try {
+        toggleShowDialog()
         firebase
           .database()
           .ref("users")
           .orderByChild("connectionId")
           .equalTo(connectionSearchResults)
-          .on("child_added", (snapshot) => {
-              firebase.database().ref("/users/" + userId).child("connections").child(snapshot.toJSON().displayName).set(connectionSearchResults)
-              firebase.database().ref("/users/" + snapshot.key).child("connections").child(userDisplayName).set(userConnectionId)
+          .limitToFirst(1)
+          .on("value", snapshot => {
+            if(snapshot.exists() === false){
+              alert('Does not exist')
+            } else {
+              snapshot.forEach(async (connection) => {
+              let currentUserQuery = firebase.database().ref("/users/" + userId).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
+              let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(userConnectionId)
+              await Promise.all([currentUserQuery, targetUserQuery]);  
+              alert('Success');
+              })
+            }
           })
-        toggleShowDialog()
-        alert('Success')
       } 
       catch (e) {
         alert(e)
