@@ -31,6 +31,19 @@ const MealSyncGroups = ({navigation}) => {
         <Headline> Meal Sync Groups </Headline>
       </View>
       <YourConnections connections={connectionCards} />
+      <View style={{display: 'flex', flexDirection: 'row', alignSelf: 'center'}} >
+        <Button
+          mode={'contained'}
+        >
+        Get Started
+        </Button>
+        <Button
+          onPress={() => navigation.navigate('MealSync')}
+          mode={'contained'}
+        >
+        Go Back
+        </Button>
+      </View>
     </View>
   )
 }

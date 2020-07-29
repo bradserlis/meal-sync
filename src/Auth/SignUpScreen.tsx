@@ -15,11 +15,15 @@ const [dialogMessage, setDialogMessage] = useState('')
 const showDialog = () => setDialogVisibility(true);
 const hideDialog = () => setDialogVisibility(false);
 
-let createConnectionId = () => {
-  let setOne = (Math.floor(Math.random()*9000) + 1000)
-  let setTwo = (Math.floor(Math.random()*9000) + 1000)
-
-  return (setOne + '-' + setTwo)
+let createConnectionId = (userid) => {
+  var hash = 0, i, chr;
+  for (i = 0; i < userid.length; i++) {
+    chr = userid.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  hash = hash.toString().slice(2);
+  return (hash.substr(0, 4) + '-' + hash.substr(4))
 }
 
   const onSubmit = () => {
@@ -30,7 +34,6 @@ let createConnectionId = () => {
     }
 
     try {
-      let connectionId: string = createConnectionId()
       firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password).then((result) => {
         firebase.auth().currentUser.updateProfile({
           displayName
@@ -38,6 +41,8 @@ let createConnectionId = () => {
           alert(error)
         })
         if(result.user.uid !== null){
+          let connectionId: string = createConnectionId(result.user.uid)
+          console.log(connectionId);
           firebase.database().ref('users').child(result.user.uid).set({displayName, connectionId, connections: ''})
           navigation.navigate('Home');
         }
