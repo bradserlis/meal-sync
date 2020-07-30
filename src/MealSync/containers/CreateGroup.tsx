@@ -9,6 +9,7 @@ import * as firebase from 'firebase';
 const CreateGroup = ({navigation}) => {
 
   const [showDialog, setShowDialog] = useState(false);
+  const [userLocation, setUserLocation] = useState(null)
   const [groupList, setGroupList] = useState([]);
   const [connectionCards, setConnectionCards] = useState([])
   const [userId] = useState(firebase.auth().currentUser.uid);
@@ -22,8 +23,35 @@ const CreateGroup = ({navigation}) => {
     setGroupList([])
   }
 
-  let createNewGroup = () => {
+
+  const getLocation = async () => {
+    const { Location, Permissions } = Expo;
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+        alert("Permission to access location was denied")     
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    setUserLocation(location);
   }
+
+  let createNewGroup = () => {
+    // let thislat = userLocation.coords.latitude;
+    // let thislong = userLocation.coords.longitude;
+    let formattedGroupList = groupList.reduce((acc, connection) => {
+      acc[connection.username] = connection.connectionId;
+      return acc; 
+    }, {});
+    let mealSyncObj = {
+      users: formattedGroupList,
+    }
+    firebase.database().ref("mealsync-groups").push(mealSyncObj)
+      //     location: 
+      // {
+      //   latitude: thislat,
+      //   longitude: thislong
+      // }
+  }
+
 
   const addConnectionToGroup = (connection) => {
     setGroupList([...groupList, connection]);
@@ -92,7 +120,7 @@ const CreateGroup = ({navigation}) => {
           <Dialog.Actions>
             <Button onPress={resetDialog}>Reset</Button>
             <Button onPress={hideDialog}>Cancel</Button>
-            <Button onPress={hideDialog}>Done</Button>
+            <Button onPress={createNewGroup}>Done</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -118,7 +146,8 @@ const styles = StyleSheet.create({
   dialogCards: {
     textAlign: 'center', 
     alignContent: 'center', 
-    justifyContent: 'center', 
+    justifyContent: 'center',
+    marginBottom: 10, 
     paddingTop: 15, 
     paddingBottom: 15, 
     backgroundColor: 'lightblue', 
