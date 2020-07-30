@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Headline, Title, Portal, Paragraph, Button, Dialog, Radio } from 'react-native-paper';
 
 import { globalStyles, dimensions } from '../../globalStyles'
@@ -17,28 +17,43 @@ const CreateGroup = ({navigation}) => {
 
   const openDialog = () => setShowDialog(true)
 
+  const resetDialog = () => {
+    retrieveConnections();
+    setGroupList([])
+  }
+
   let createNewGroup = () => {
   }
 
   const addConnectionToGroup = (connection) => {
-    console.log('addConnectionToGroup', connection);
+    setGroupList([...groupList, connection]);
+    let arr = connectionCards.filter((card) => card.connectionId !== connection.connectionId)
+    setConnectionCards(arr)
   }
 
   useEffect(() => {
     retrieveConnections();
   }, [])
 
-  let itemRenderer = (connection) => {
+  const itemRendererClickable = (connection) => {
     return (
       <TouchableOpacity
-        onPress={addConnectionToGroup}
+        onPress={() => addConnectionToGroup(connection.item)}
       > 
-        <Paragraph style={{paddingTop: 15, paddingBottom: 15, backgroundColor: 'lightblue', width: dimensions.fullWidth/2}}>{connection.item.username}</Paragraph>
+      <Paragraph style={styles.dialogCards}>{connection.item.username}</Paragraph>
       </TouchableOpacity>
     )
   }
 
-  let retrieveConnections =  () => {
+  const itemRendererNonClickable = (connection) => {
+    return (
+      <View style={{display: 'flex', justifyContent: 'space-around'}}>
+        <Paragraph style={styles.dialogCards}>{connection.item.username}</Paragraph>
+      </View>
+    )
+  }
+
+  const retrieveConnections =  () => {
     let connectionsList = [];
      firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
       snapshot.forEach((item) =>{
@@ -54,25 +69,29 @@ const CreateGroup = ({navigation}) => {
         <Headline> Create Meal Sync Groups </Headline>
       </View>
       <Portal>
-        <Dialog style={{width: dimensions.fullWidth/1.1, height: dimensions.fullHeight/2}} visible={showDialog} onDismiss={hideDialog}>
+        <Dialog style={{width: dimensions.fullWidth/1.1, height: dimensions.fullHeight/1.3}} visible={showDialog} onDismiss={hideDialog}>
         <Dialog.Title> Select Connections for this group </Dialog.Title>
           <Dialog.Content style={{display: 'flex', flex: 1}}>
-            <Title> To be added: </Title>
+            <Title> New Group:</Title>
             <FlatList
+              contentContainerStyle={{padding: 10}}
               data={groupList}
-              renderItem={itemRenderer}
-            >
-            </FlatList>
-              <Title>Available Connections</Title>
-              <ScrollView contentContainerStyle={{display: 'flex', flex: 2}}>
-                <FlatList
-                  data={connectionCards}
-                  renderItem={itemRenderer}
-                >
-                </FlatList>
-              </ScrollView>
+              keyExtractor={item => item.connectionId}
+              renderItem={itemRendererNonClickable}
+            />
+            <Title>Available Connections:</Title>
+              <FlatList
+                contentContainerStyle=
+                {{padding: 10
+                }}
+                data={connectionCards}
+                renderItem={itemRendererClickable}
+                keyExtractor={item => item.connectionId}
+              />
           </Dialog.Content>
           <Dialog.Actions>
+            <Button onPress={resetDialog}>Reset</Button>
+            <Button onPress={hideDialog}>Cancel</Button>
             <Button onPress={hideDialog}>Done</Button>
           </Dialog.Actions>
         </Dialog>
@@ -95,11 +114,16 @@ const CreateGroup = ({navigation}) => {
   )
 }
 
-
-      // {
-      //   connectionCards && connectionCards.map((connection) => {
-      //     <Paragraph> {connection.username} </Paragraph>
-      //   })
-      // }
+const styles = StyleSheet.create({
+  dialogCards: {
+    textAlign: 'center', 
+    alignContent: 'center', 
+    justifyContent: 'center', 
+    paddingTop: 15, 
+    paddingBottom: 15, 
+    backgroundColor: 'lightblue', 
+    width: dimensions.fullWidth/2.5
+  },
+})
 
 export default CreateGroup;
