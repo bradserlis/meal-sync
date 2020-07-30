@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import { View, ScrollView, FlatList, TouchableOpacity, } from 'react-native';
 import { Headline, Title, Portal, Paragraph, Button, Dialog, Radio } from 'react-native-paper';
 
 import { globalStyles, dimensions } from '../../globalStyles'
@@ -21,20 +21,30 @@ const CreateGroup = ({navigation}) => {
   }
 
   const addConnectionToGroup = (connection) => {
-    console.log('addConnectionToGroup', connection);
+    setGroupList([...groupList, connection]);
+    let arr = connectionCards.filter((card) => card.connectionId !== connection.connectionId)
+    setConnectionCards(arr)
   }
 
   useEffect(() => {
     retrieveConnections();
   }, [])
 
-  let itemRenderer = (connection) => {
+  let itemRendererClickable = (connection) => {
     return (
       <TouchableOpacity
-        onPress={addConnectionToGroup}
+        onPress={() => addConnectionToGroup(connection.item)}
       > 
-        <Paragraph style={{paddingTop: 15, paddingBottom: 15, backgroundColor: 'lightblue', width: dimensions.fullWidth/2}}>{connection.item.username}</Paragraph>
+      <Paragraph style={{paddingTop: 15, paddingBottom: 15, backgroundColor: 'lightblue', width: dimensions.fullWidth/2}}>data</Paragraph>
       </TouchableOpacity>
+    )
+  }
+
+  let itemRendererNonClickable = (connection) => {
+    return (
+      <View>
+        <Paragraph style={{paddingTop: 15, paddingBottom: 15, backgroundColor: 'lightblue', width: dimensions.fullWidth/2}}>data</Paragraph>
+      </View>
     )
   }
 
@@ -60,17 +70,17 @@ const CreateGroup = ({navigation}) => {
             <Title> To be added: </Title>
             <FlatList
               data={groupList}
-              renderItem={itemRenderer}
+              keyExtractor={item => item.connectionId}
+              renderItem={itemRendererNonClickable}
             >
             </FlatList>
               <Title>Available Connections</Title>
-              <ScrollView contentContainerStyle={{display: 'flex', flex: 2}}>
                 <FlatList
                   data={connectionCards}
-                  renderItem={itemRenderer}
+                  renderItem={itemRendererClickable}
+                  keyExtractor={item => item.connectionId}
                 >
                 </FlatList>
-              </ScrollView>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={hideDialog}>Done</Button>
