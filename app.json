@@ -22,7 +22,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Your location is needed to find places to eat nearby",
+        "NSLocationAlwaysUsageDescription": "Your location is needed to find places to eat nearby"
+      }
     }
   }
 }

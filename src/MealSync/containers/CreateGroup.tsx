@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Headline, Title, Portal, Paragraph, Button, Dialog, Radio } from 'react-native-paper';
+import * as firebase from 'firebase';
+import * as Location from 'expo-location';
 
 import { globalStyles, dimensions } from '../../globalStyles'
 import YourConnections from '../../Connections/containers/YourConnections';
-import * as firebase from 'firebase';
 
 const CreateGroup = ({navigation}) => {
 
@@ -23,10 +24,8 @@ const CreateGroup = ({navigation}) => {
     setGroupList([])
   }
 
-
   const getLocation = async () => {
-    const { Location, Permissions } = Expo;
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    let { status } = await Location.requestPermissionsAsync();
     if (status !== "granted") {
         alert("Permission to access location was denied")     
     }
@@ -34,24 +33,26 @@ const CreateGroup = ({navigation}) => {
     setUserLocation(location);
   }
 
-  let createNewGroup = () => {
-    // let thislat = userLocation.coords.latitude;
-    // let thislong = userLocation.coords.longitude;
-    let formattedGroupList = groupList.reduce((acc, connection) => {
-      acc[connection.username] = connection.connectionId;
+  let createNewGroup = async () => {
+    let location = getLocation();
+    let thislat = userLocation.coords.latitude;
+    let thislong = userLocation.coords.longitude;
+    let formattedGroupList = await groupList.reduce((acc, connection) => {
+      acc[connection.connectionId] = connection.username;
       return acc; 
     }, {});
     let mealSyncObj = {
       users: formattedGroupList,
+      location: 
+      {
+        latitude: thislat,
+        longitude: thislong
+      }
     }
-    firebase.database().ref("mealsync-groups").push(mealSyncObj)
-      //     location: 
-      // {
-      //   latitude: thislat,
-      //   longitude: thislong
-      // }
+    let setMealSyncGroup = firebase.database().ref("mealsync-groups").push(mealSyncObj)
+    await Promise.all([location, formattedGroupList, mealSyncObj, setMealSyncGroup])
+    alert('stored')
   }
-
 
   const addConnectionToGroup = (connection) => {
     setGroupList([...groupList, connection]);
