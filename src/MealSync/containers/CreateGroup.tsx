@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Headline, Title, Portal, Paragraph, Button, Dialog, Radio } from 'react-native-paper';
+import * as firebase from 'firebase';
+import * as Location from 'expo-location';
 
 import { globalStyles, dimensions } from '../../globalStyles'
 import YourConnections from '../../Connections/containers/YourConnections';
-import * as firebase from 'firebase';
 
 const CreateGroup = ({navigation}) => {
 
   const [showDialog, setShowDialog] = useState(false);
+  const [userLocation, setUserLocation] = useState(null)
   const [groupList, setGroupList] = useState([]);
   const [connectionCards, setConnectionCards] = useState([])
   const [userId] = useState(firebase.auth().currentUser.uid);
@@ -22,7 +24,34 @@ const CreateGroup = ({navigation}) => {
     setGroupList([])
   }
 
-  let createNewGroup = () => {
+  const getLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== "granted") {
+        alert("Permission to access location was denied")     
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    setUserLocation(location);
+  }
+
+  let createNewGroup = async () => {
+    let location = getLocation();
+    let thislat = userLocation.coords.latitude;
+    let thislong = userLocation.coords.longitude;
+    let formattedGroupList = await groupList.reduce((acc, connection) => {
+      acc[connection.connectionId] = connection.username;
+      return acc; 
+    }, {});
+    let mealSyncObj = {
+      users: formattedGroupList,
+      location: 
+      {
+        latitude: thislat,
+        longitude: thislong
+      }
+    }
+    let setMealSyncGroup = firebase.database().ref("mealsync-groups").push(mealSyncObj)
+    await Promise.all([location, formattedGroupList, mealSyncObj, setMealSyncGroup])
+    alert('stored')
   }
 
   const addConnectionToGroup = (connection) => {
@@ -92,7 +121,7 @@ const CreateGroup = ({navigation}) => {
           <Dialog.Actions>
             <Button onPress={resetDialog}>Reset</Button>
             <Button onPress={hideDialog}>Cancel</Button>
-            <Button onPress={hideDialog}>Done</Button>
+            <Button onPress={createNewGroup}>Done</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -118,7 +147,8 @@ const styles = StyleSheet.create({
   dialogCards: {
     textAlign: 'center', 
     alignContent: 'center', 
-    justifyContent: 'center', 
+    justifyContent: 'center',
+    marginBottom: 10, 
     paddingTop: 15, 
     paddingBottom: 15, 
     backgroundColor: 'lightblue', 

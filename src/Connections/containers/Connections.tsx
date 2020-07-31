@@ -49,7 +49,7 @@ const Connections = ({ navigation }) => {
     })
   }
 
-  let retrieveConnections =  async () => {
+  let retrieveConnections =  () => {
     let connectionsList = [];
      firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
       snapshot.forEach((item) =>{
