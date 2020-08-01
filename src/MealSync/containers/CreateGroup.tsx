@@ -31,13 +31,14 @@ const CreateGroup = ({navigation}) => {
     }
     let location = await Location.getCurrentPositionAsync({});
     setUserLocation(location);
+    return Promise.resolve();
   }
 
   let createNewGroup = async () => {
-    let location = getLocation();
+    await getLocation();
     let thislat = userLocation.coords.latitude;
     let thislong = userLocation.coords.longitude;
-    let formattedGroupList = await groupList.reduce((acc, connection) => {
+    let formattedGroupList = groupList.reduce((acc, connection) => {
       acc[connection.connectionId] = connection.username;
       return acc; 
     }, {});
@@ -49,9 +50,12 @@ const CreateGroup = ({navigation}) => {
         longitude: thislong
       }
     }
-    let setMealSyncGroup = firebase.database().ref("mealsync-groups").push(mealSyncObj)
-    await Promise.all([location, formattedGroupList, mealSyncObj, setMealSyncGroup])
-    alert('stored')
+    return firebase.database().ref("mealsync-groups").push(mealSyncObj);
+  }
+
+  const handleCreateGroup = async () => {
+    await createNewGroup();
+    alert('Added Group');
   }
 
   const addConnectionToGroup = (connection) => {
@@ -121,7 +125,7 @@ const CreateGroup = ({navigation}) => {
           <Dialog.Actions>
             <Button onPress={resetDialog}>Reset</Button>
             <Button onPress={hideDialog}>Cancel</Button>
-            <Button onPress={createNewGroup}>Done</Button>
+            <Button onPress={handleCreateGroup}>Done</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
