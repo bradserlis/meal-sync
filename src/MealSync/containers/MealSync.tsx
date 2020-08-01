@@ -20,7 +20,7 @@ import * as Location from 'expo-location';
 
 import { globalStyles, dimensions } from '../../globalStyles'
 import MealSyncGroups from './MealSyncGroups';
-import CreateGroup from './CreateGroup';
+import MealSyncCardsContainer from './MealSyncCardsContainer';
 
 const MealSync = ({navigation}) => {
 
@@ -58,11 +58,13 @@ const MealSync = ({navigation}) => {
         longitude: location.coords.longitude
       }
     }
-    return firebase.database().ref("mealsync-groups").push(mealSyncObj);
+    firebase.database().ref("mealsync-groups").push(mealSyncObj);
+    return Promise.resolve();
   }
 
   const handleCreateGroup = async () => {
     await createNewGroup();
+    navigation.navigate('MealSyncCardsContainer', {location: userLocation})
     alert('Added Group');
   }
 
