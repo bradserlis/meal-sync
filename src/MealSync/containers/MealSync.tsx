@@ -55,12 +55,6 @@ const MealSync = ({navigation}) => {
   }
 
   let createNewGroup = async () => {
-    // let { status } = await Location.requestPermissionsAsync();
-    // if (status !== "granted") {
-    //     alert("Permission to access location was denied")     
-    // }
-    // let location = await Location.getCurrentPositionAsync({});
-    // setUserLocation(location);
     let formattedGroupList = groupList.reduce((acc, connection) => {
       acc[connection.connectionId] = connection.username;
       return acc; 
@@ -73,14 +67,13 @@ const MealSync = ({navigation}) => {
         longitude: userLocation.coords.longitude
       }
     }
-    setRoom(mealSyncObj)
     firebase.database().ref("mealsync-groups").push(mealSyncObj);
-    return Promise.resolve();
+    return mealSyncObj;
   }
 
   const handleCreateGroup = async () => {
-    await createNewGroup();
-    navigation.navigate('MealSyncCardsContainer', {room: room})
+    let roomObj = await createNewGroup();
+    navigation.navigate('MealSyncCardsContainer', {room: roomObj})
     alert('Added Group');
   }
 
