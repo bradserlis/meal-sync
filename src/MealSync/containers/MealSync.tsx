@@ -25,7 +25,8 @@ import MealSyncCardsContainer from './MealSyncCardsContainer';
 const MealSync = ({navigation}) => {
 
   const [showDialog, setShowDialog] = useState(false);
-  const [userLocation, setUserLocation] = useState(null)
+  const [userLocation, setUserLocation] = useState(null);
+  const [room, setRoom] = useState({});
   const [groupList, setGroupList] = useState([]);
   const [connectionCards, setConnectionCards] = useState([])
   const [userId] = useState(firebase.auth().currentUser.uid);
@@ -33,19 +34,27 @@ const MealSync = ({navigation}) => {
   const hideDialog = () => setShowDialog(false)
 
   const openDialog = () => setShowDialog(true)
+  
+  useEffect(() => {
+    retrieveConnections();
+    getLocation();
+  }, [])
 
   const resetDialog = () => {
     retrieveConnections();
     setGroupList([])
   }
 
-  let createNewGroup = async () => {
+  const getLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== "granted") {
         alert("Permission to access location was denied")     
     }
     let location = await Location.getCurrentPositionAsync({});
     setUserLocation(location);
+  }
+
+  let createNewGroup = async () => {
     let formattedGroupList = groupList.reduce((acc, connection) => {
       acc[connection.connectionId] = connection.username;
       return acc; 
@@ -54,17 +63,17 @@ const MealSync = ({navigation}) => {
       users: formattedGroupList,
       location: 
       {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude
       }
     }
     firebase.database().ref("mealsync-groups").push(mealSyncObj);
-    return Promise.resolve();
+    return mealSyncObj;
   }
 
   const handleCreateGroup = async () => {
-    await createNewGroup();
-    navigation.navigate('MealSyncCardsContainer', {location: userLocation})
+    let roomObj = await createNewGroup();
+    navigation.navigate('MealSyncCardsContainer', {room: roomObj})
     alert('Added Group');
   }
 
@@ -74,9 +83,6 @@ const MealSync = ({navigation}) => {
     setConnectionCards(arr)
   }
 
-  useEffect(() => {
-    retrieveConnections();
-  }, [])
 
   const itemRendererClickable = (connection) => {
     return (

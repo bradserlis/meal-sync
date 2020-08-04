@@ -7,7 +7,7 @@ import { globalStyles, dimensions } from '../../globalStyles'
 const MealSyncCardsContainer = ({navigation, props}) => {
 
   useEffect(() => {
-    console.log('update mealsync cards container', navigation.getParam("location"))
+    console.log('update mealsync cards container', navigation.getParam("room"))
   })
   
   return (
