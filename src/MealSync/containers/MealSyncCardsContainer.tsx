@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Image } from 'react-native';
 import { Title, Headline, Paragraph, Button } from 'react-native-paper';
+import { Container, Header, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body, Icon } from 'native-base';
+
 
 import { globalStyles, dimensions } from '../../globalStyles'
 
@@ -10,6 +12,7 @@ export default class MealSyncCardsContainer extends Component {
     this.state = {
       roomLocation: null,
       nearbyResults: this.setSeedData(),
+      userResponses: []
     }
   }
 
@@ -329,6 +332,22 @@ export default class MealSyncCardsContainer extends Component {
     ))
   }
 
+  swipeLogic = (name: string, num: number) => {
+    let responseObj = {}
+    console.log('No to', name);
+    this.setState({
+      userResponses: [...this.state.userResponses, {[name]: num}]
+    }, () => console.log('responses', this.state.userResponses))
+  }
+
+  onSwipeLeft = (name: string) => {
+    this.swipeLogic(name, 1)
+  }
+
+  onSwipeRight = (name: string) => {
+    this.swipeLogic(name, 0)
+  }
+
   render(){
     const { navigate } = this.props.navigation;
     console.log('props', this.props)  
@@ -337,6 +356,33 @@ export default class MealSyncCardsContainer extends Component {
       <View style={globalStyles.container}>
         <View style={globalStyles.dividerDiv}>
           <Headline> Meal Sync Groups </Headline>
+        </View>
+        <View>
+          <DeckSwiper
+            dataSource={this.state.nearbyResults}
+            renderItem={item =>
+              <Card style={{ elevation: 3 }}>
+                <CardItem>
+                  <Left>
+                    <Thumbnail 
+                    source={{uri: item.icon}} />
+                    <Body>
+                      <Text>{item.name}</Text>
+                      <Text note>NativeBase</Text>
+                    </Body>
+                  </Left>
+                </CardItem>
+                <CardItem cardBody>
+                  <Image style={{ height: 300, flex: 1 }} source={{uri: item.icon}} />
+                </CardItem>
+                <CardItem>
+                  <Text>{item.vicinity}</Text>
+                </CardItem>
+              </Card>
+            }
+            onSwipeRight={(item) => this.onSwipeRight(item.name)}
+            onSwipeLeft={(item) => this.onSwipeLeft(item.name)}
+          />
         </View>
       </View>  
     )
