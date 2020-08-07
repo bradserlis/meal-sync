@@ -332,12 +332,43 @@ export default class MealSyncCardsContainer extends Component {
     ))
   }
 
+  renderItem = (item) => {
+    if(item.vicinity){
+      return(
+        <Card style={{ elevation: 3 }}>
+          <CardItem>
+            <Left>
+              <Thumbnail 
+              source={{uri: item.icon}} />
+              <Body>
+                <Text>{item.name}</Text>
+                <Text note>NativeBase</Text>
+              </Body>
+            </Left>
+          </CardItem>
+          <CardItem cardBody>
+            <Image style={{ height: 300, flex: 1 }} source={{uri: item.icon}} />
+          </CardItem>
+          <CardItem>
+            <Text>{item.vicinity}</Text>
+          </CardItem>
+        </Card>
+      )
+    } else {
+      alert('YOU ARE DONE')
+      return(
+        <View>
+        <Title>END</Title>
+        </View>
+      )
+    }
+  }
+
   swipeLogic = (name: string, num: number) => {
     let responseObj = {}
-    console.log('No to', name);
     this.setState({
       userResponses: [...this.state.userResponses, {[name]: num}]
-    }, () => console.log('responses', this.state.userResponses))
+    })
   }
 
   onSwipeLeft = (name: string) => {
@@ -346,6 +377,22 @@ export default class MealSyncCardsContainer extends Component {
 
   onSwipeRight = (name: string) => {
     this.swipeLogic(name, 0)
+  }
+
+  handleFinishSwiping = () => {
+    console.log('finished with', this.state.userResponses);
+      return( <View style={{ alignSelf: "center" }}>
+          <Text>Over</Text>
+        </View>
+      )
+  }
+
+  renderBottom = () => {
+    return(
+      <View>
+        <Text> Blah </Text>
+      </View>
+    )
   }
 
   render(){
@@ -360,31 +407,37 @@ export default class MealSyncCardsContainer extends Component {
         <View>
           <DeckSwiper
             dataSource={this.state.nearbyResults}
-            renderItem={item =>
-              <Card style={{ elevation: 3 }}>
-                <CardItem>
-                  <Left>
-                    <Thumbnail 
-                    source={{uri: item.icon}} />
-                    <Body>
-                      <Text>{item.name}</Text>
-                      <Text note>NativeBase</Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem cardBody>
-                  <Image style={{ height: 300, flex: 1 }} source={{uri: item.icon}} />
-                </CardItem>
-                <CardItem>
-                  <Text>{item.vicinity}</Text>
-                </CardItem>
-              </Card>
-            }
+            looping={false}
+            renderItem={this.renderItem}
             onSwipeRight={(item) => this.onSwipeRight(item.name)}
             onSwipeLeft={(item) => this.onSwipeLeft(item.name)}
+            renderEmpty={this.handleFinishSwiping}
           />
         </View>
       </View>  
     )
   }
 }
+
+
+
+// item =>
+//               <Card style={{ elevation: 3 }}>
+//                 <CardItem>
+//                   <Left>
+//                     <Thumbnail 
+//                     source={{uri: item.icon}} />
+//                     <Body>
+//                       <Text>{item.name}</Text>
+//                       <Text note>NativeBase</Text>
+//                     </Body>
+//                   </Left>
+//                 </CardItem>
+//                 <CardItem cardBody>
+//                   <Image style={{ height: 300, flex: 1 }} source={{uri: item.icon}} />
+//                 </CardItem>
+//                 <CardItem>
+//                   <Text>{item.vicinity}</Text>
+//                 </CardItem>
+//               </Card>
+//             }
