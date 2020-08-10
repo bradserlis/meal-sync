@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { Headline, Title, Portal, Paragraph, Button, Dialog, Radio } from 'react-native-paper';
+import { Headline, Title, Portal, Paragraph, Button, Dialog } from 'react-native-paper';
 import * as firebase from 'firebase';
 import * as Location from 'expo-location';
 
