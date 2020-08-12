@@ -301,6 +301,11 @@ export default class MealSyncCardsContainer extends Component {
       "user_ratings_total": 219,
       "vicinity": "729 1st Street, Brentwood",
     },
+    {
+      name:'',
+      vicinity: '',
+      icon: '#'
+    }
  ]  
   return seedResults;
 }
@@ -308,7 +313,6 @@ export default class MealSyncCardsContainer extends Component {
   componentDidMount = () => {
     // !this.state.nearbyResults && /*this.getMealSyncCards()*/ this.setState({nearbyResults:seedResults})
    this.state.nearbyResults && this.state.nearbyResults.map((result) => {
-      console.log('each result', result)
     })
   }
 
@@ -355,10 +359,9 @@ export default class MealSyncCardsContainer extends Component {
         </Card>
       )
     } else {
-      alert('YOU ARE DONE')
       return(
-        <View>
-        <Title>END</Title>
+        <View style={{display: 'flex', flex: 1, height: '100%', alignSelf: 'center'}}>
+        <Title>Loading...</Title>
         </View>
       )
     }
@@ -381,16 +384,17 @@ export default class MealSyncCardsContainer extends Component {
 
   handleFinishSwiping = () => {
     console.log('finished with', this.state.userResponses);
-      return( <View style={{ alignSelf: "center" }}>
-          <Text>Over</Text>
-        </View>
-      )
   }
 
   renderBottom = () => {
     return(
       <View>
-        <Text> Blah </Text>
+        <Text>You've finished swiping. Click "complete" below to finalize</Text>
+          <Button
+          title='Complete'
+          onClick={() => console.log('completed with', this.state.userResponses)}
+          >
+          </Button>
       </View>
     )
   }
@@ -404,8 +408,9 @@ export default class MealSyncCardsContainer extends Component {
         <View style={globalStyles.dividerDiv}>
           <Headline> Meal Sync Groups </Headline>
         </View>
-        <View>
+        <View style={{flex: 1, display: 'flex'}}>
           <DeckSwiper
+            style={{flex: 1, display: 'flex'}}
             dataSource={this.state.nearbyResults}
             looping={false}
             renderItem={this.renderItem}
