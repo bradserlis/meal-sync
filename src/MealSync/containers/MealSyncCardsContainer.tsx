@@ -301,25 +301,20 @@ export default class MealSyncCardsContainer extends Component {
       "user_ratings_total": 219,
       "vicinity": "729 1st Street, Brentwood",
     },
+    {
+      name:'',
+      vicinity: '',
+      icon: '#'
+    }
  ]  
   return seedResults;
 }
 
   componentDidMount = () => {
-    // !this.state.nearbyResults && /*this.getMealSyncCards()*/ this.setState({nearbyResults:seedResults})
+    // !this.state.nearbyResults && /*this.getMealSyncCards()
    this.state.nearbyResults && this.state.nearbyResults.map((result) => {
-      console.log('each result', result)
     })
   }
-
-  // const [roomLocation] = useState(navigation.getParam('room').location)
-  // const [nearbyResults, setNearbyResults] = useState([])
-  // useEffect(() => {
-  //   console.log('update mealsync cards container', navigation.getParam("room"))
-  //   console.log('we still have the api key', process.env.GOOGLE_API_KEY)
-  //   // console.log('but do we have roomLocation?', roomLocation)
-  //   // getMealSyncCards()
-  // }, [])
 
   getMealSyncCards = () => {
     console.log('call getMealSyncCards')
@@ -335,37 +330,35 @@ export default class MealSyncCardsContainer extends Component {
   renderItem = (item) => {
     if(item.vicinity){
       return(
-        <Card style={{ elevation: 3 }}>
+        <View style={{ display: 'flex', flex: 1, alignSelf:'center', justifyContent: 'center', alignContent: 'center', width: dimensions.fullWidth/1.25 }}>
+        <Card style={{ elevation: 4, padding: 20, height: dimensions.fullHeight/2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <CardItem>
-            <Left>
               <Thumbnail 
               source={{uri: item.icon}} />
-              <Body>
-                <Text>{item.name}</Text>
-                <Text note>NativeBase</Text>
-              </Body>
-            </Left>
-          </CardItem>
-          <CardItem cardBody>
-            <Image style={{ height: 300, flex: 1 }} source={{uri: item.icon}} />
           </CardItem>
           <CardItem>
-            <Text>{item.vicinity}</Text>
+              <Body style={{verticalAlign: 'center'}}>
+                <Text style={{fontSize: 30, textAlign: 'center'}}>{item.name}</Text>
+              </Body>
+          </CardItem>
+          <CardItem cardBody>
+          <Body>
+            <Text style={{fontSize: 25, textAlign: 'center'}}> Located: {item.vicinity}</Text>
+          </Body>
           </CardItem>
         </Card>
+        </View>
       )
     } else {
-      alert('YOU ARE DONE')
       return(
-        <View>
-        <Title>END</Title>
+        <View style={{display: 'flex', flex: 1, alignSelf: 'center'}}>
+        <Title>Loading...</Title>
         </View>
       )
     }
   }
 
   swipeLogic = (name: string, num: number) => {
-    let responseObj = {}
     this.setState({
       userResponses: [...this.state.userResponses, {[name]: num}]
     })
@@ -381,18 +374,6 @@ export default class MealSyncCardsContainer extends Component {
 
   handleFinishSwiping = () => {
     console.log('finished with', this.state.userResponses);
-      return( <View style={{ alignSelf: "center" }}>
-          <Text>Over</Text>
-        </View>
-      )
-  }
-
-  renderBottom = () => {
-    return(
-      <View>
-        <Text> Blah </Text>
-      </View>
-    )
   }
 
   render(){
@@ -400,11 +381,13 @@ export default class MealSyncCardsContainer extends Component {
     console.log('props', this.props)  
     
     return (
-      <View style={globalStyles.container}>
-        <View style={globalStyles.dividerDiv}>
-          <Headline> Meal Sync Groups </Headline>
-        </View>
-        <View>
+      <View style={{
+      display: 'flex', 
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center' 
+      }}>
+        <View style={{flex: 1, display: 'flex', height: dimensions.fullHeight/2 }}>
           <DeckSwiper
             dataSource={this.state.nearbyResults}
             looping={false}
@@ -419,25 +402,6 @@ export default class MealSyncCardsContainer extends Component {
   }
 }
 
-
-
-// item =>
-//               <Card style={{ elevation: 3 }}>
-//                 <CardItem>
-//                   <Left>
-//                     <Thumbnail 
-//                     source={{uri: item.icon}} />
-//                     <Body>
-//                       <Text>{item.name}</Text>
-//                       <Text note>NativeBase</Text>
-//                     </Body>
-//                   </Left>
-//                 </CardItem>
-//                 <CardItem cardBody>
-//                   <Image style={{ height: 300, flex: 1 }} source={{uri: item.icon}} />
-//                 </CardItem>
-//                 <CardItem>
-//                   <Text>{item.vicinity}</Text>
-//                 </CardItem>
-//               </Card>
-//             }
+// <View style={globalStyles.dividerDiv}>
+// <Headline> Meal Sync Groups </Headline>
+// </View>
