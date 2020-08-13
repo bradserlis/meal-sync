@@ -59,7 +59,9 @@ const MealSync = ({navigation}) => {
       acc[connection.connectionId] = connection.username;
       return acc; 
     }, {});
+    let key = firebase.database().ref('/mealsync-groups').push().key;    
     let mealSyncObj = {
+      key,
       users: formattedGroupList,
       location: 
       {
@@ -67,7 +69,7 @@ const MealSync = ({navigation}) => {
         longitude: userLocation.coords.longitude
       }
     }
-    firebase.database().ref("mealsync-groups").push(mealSyncObj);
+    firebase.database().ref("/mealsync-groups/"+key).set(mealSyncObj);
     return mealSyncObj;
   }
 
