@@ -30,6 +30,7 @@ const MealSync = ({navigation}) => {
   const [groupList, setGroupList] = useState([]);
   const [connectionCards, setConnectionCards] = useState([])
   const [userId] = useState(firebase.auth().currentUser.uid);
+  const [currentUserObject, setCurrentUserObject] = useState({})
 
   const hideDialog = () => setShowDialog(false)
 
@@ -59,7 +60,11 @@ const MealSync = ({navigation}) => {
       acc[connection.connectionId] = connection.username;
       return acc; 
     }, {});
+    //add current user to groupList
+    Object.assign(formattedGroupList, currentUserObject)
+    let key = firebase.database().ref('/mealsync-groups').push().key;    
     let mealSyncObj = {
+      key,
       users: formattedGroupList,
       location: 
       {
@@ -67,7 +72,7 @@ const MealSync = ({navigation}) => {
         longitude: userLocation.coords.longitude
       }
     }
-    firebase.database().ref("mealsync-groups").push(mealSyncObj);
+    firebase.database().ref("/mealsync-groups/"+key).set(mealSyncObj);
     return mealSyncObj;
   }
 
@@ -103,13 +108,17 @@ const MealSync = ({navigation}) => {
   }
 
   const retrieveConnections =  () => {
-    let connectionsList = [];
-     firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
-      snapshot.forEach((item) =>{
-        connectionsList.push({username: item.key, connectionId: item.toJSON()})
-      })
-    setConnectionCards(connectionsList)
+    let connectionsList: Array<Object> = [];
+    firebase.database().ref('/users/'+userId).once('value', (snapshot) => {
+      let snapshotJSON = snapshot.val();
+      let userConnectionId = snapshotJSON.connectionId;
+      setCurrentUserObject({[snapshotJSON.connectionId]: snapshotJSON.displayName})
+      for (const [key, value] of Object.entries(snapshotJSON.connections)) 
+      {
+        connectionsList.push({username: key, connectionId: value})  
+      }
     })
+    setConnectionCards(connectionsList);
   }
 
   return(

@@ -374,11 +374,10 @@ export default class MealSyncCardsContainer extends Component {
 
   handleFinishSwiping = () => {
     console.log('finished with', this.state.userResponses);
+    this.props.navigation.navigate('MealSync')
   }
 
   render(){
-    const { navigate } = this.props.navigation;
-    console.log('props', this.props)  
     
     return (
       <View style={{
