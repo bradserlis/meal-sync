@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, FlatList, ScrollView } from 'react-native'
 import { Headline, Paragraph, Button, Title, Dialog, Portal, Text } from 'react-native-paper';
 import * as firebase from 'firebase'
@@ -6,8 +6,10 @@ import * as firebase from 'firebase'
 import { globalStyles, dimensions } from '../../globalStyles';
 import YourConnections from './YourConnections';
 import AddConnection from './AddConnection'
+import { AppContext } from '../../../context/AppContext';
 
 const Connections = ({ navigation }) => {
+  const { currentUserObject } = useContext(AppContext);
 
   const [connectionCards, setConnectionCards] = useState([])
   const [showDialog, setShowDialog] = useState(false)
@@ -16,11 +18,6 @@ const Connections = ({ navigation }) => {
   const [connectionSearchResults, setConnectionSearchResults] = useState('')
   const [userId] = useState(firebase.auth().currentUser.uid)
   const [userDisplayName] = useState(firebase.auth().currentUser.displayName)
-  const [userConnectionId, setUserConnectionId] = useState('')
-
-  useEffect(() => {
-    retrieveUserConnectionId();
-  }, [])
 
   useEffect( () => {
     retrieveConnections();  
@@ -39,24 +36,12 @@ const Connections = ({ navigation }) => {
     setConnectionSearchResults(user.toString())
   }
 
-  let retrieveUserConnectionId = () => {
-     firebase
-    .database()
-    .ref("/users/" + userId)
-    .child("connectionId")
-    .once("value", snapshot => {
-      setUserConnectionId(snapshot.val())
-    })
-  }
-
   let retrieveConnections =  () => {
     let connectionsList = [];
-     firebase.database().ref('/users/'+userId).child('connections').once('value', (snapshot) => {
-      snapshot.forEach((item) =>{
-        connectionsList.push({username: item.key, connectionId: item.toJSON()})
-      })
-    setConnectionCards(connectionsList)
-    })
+    for(let [key, value] of Object.entries(currentUserObject.connections)){
+      connectionsList.push({username: key, connectionId: value})
+    }
+    setConnectionCards(connectionsList) 
   }
 
   let checkForConnection = () => {
@@ -80,7 +65,7 @@ const Connections = ({ navigation }) => {
             } else {
               snapshot.forEach(async (connection) => {
               let currentUserQuery = firebase.database().ref("/users/" + userId).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
-              let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(userConnectionId)
+              let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(currentUserObject.connectionId)
               await Promise.all([currentUserQuery, targetUserQuery]);  
               alert('Success');
               })
