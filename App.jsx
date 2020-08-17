@@ -6,6 +6,7 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 
+import { AppContextProvider } from './context/AppContext';
 import Router from './src/Navigation/Router';
 import Landing from './src/Landing/Landing';
 
@@ -43,7 +44,9 @@ class App extends Component {
     return (
       <SafeAreaView style={{ display: 'flex', flex: 1 }}>
         <PaperProvider>
+        <AppContextProvider>
           <Router />
+        </AppContextProvider>
         </PaperProvider>
       </SafeAreaView>
     )
