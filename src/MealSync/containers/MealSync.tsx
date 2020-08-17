@@ -56,7 +56,6 @@ const MealSync = ({navigation}) => {
   }
 
   let createNewGroup = async () => {
-    
     let formattedGroupList = groupList.reduce((acc, connection) => {
       acc[connection.connectionId] = connection.username;
       return acc; 
