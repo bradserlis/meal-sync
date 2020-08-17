@@ -19,7 +19,7 @@ import * as firebase from 'firebase';
 import * as Location from 'expo-location';
 
 import { globalStyles, dimensions } from '../../globalStyles'
-import MealSyncGroups from './MealSyncGroups';
+import MealSyncResults from './MealSyncResults';
 import MealSyncCardsContainer from './MealSyncCardsContainer';
 
 const MealSync = ({navigation}) => {
@@ -87,7 +87,6 @@ const MealSync = ({navigation}) => {
     let arr = connectionCards.filter((card) => card.connectionId !== connection.connectionId)
     setConnectionCards(arr)
   }
-
 
   const itemRendererClickable = (connection) => {
     return (
@@ -165,7 +164,7 @@ const MealSync = ({navigation}) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonStyle}
-        onPress={() => navigation.navigate('MealSyncGroups')}
+        onPress={() => navigation.navigate('MealSyncResults')}
       >
         <Title style={[styles.buttonTextStyle, styles.buttonTextEmphasisStyle]}>See</Title>
         <Title style={styles.buttonTextStyle}> Previous Results </Title>
