@@ -22,8 +22,9 @@ let createConnectionId = (userid) => {
     hash = ((hash << 5) - hash) + chr;
     hash |= 0; // Convert to 32bit integer
   }
-  hash = hash.toString().slice(2);
-  return (hash.substr(0, 4) + '-' + hash.substr(4))
+  let result = Math.abs(hash).toString();
+  result = result.padStart(8, "0");
+  return (result.substr(0, 4) + '-' + result.substr(4, 4))
 }
 
   const onSubmit = () => {
