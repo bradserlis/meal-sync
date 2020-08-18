@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import 
 { 
   View, 
@@ -21,16 +21,17 @@ import * as Location from 'expo-location';
 import { globalStyles, dimensions } from '../../globalStyles'
 import MealSyncResults from './MealSyncResults';
 import MealSyncCardsContainer from './MealSyncCardsContainer';
+import { AppContext } from '../../../context/AppContext';
 
 const MealSync = ({navigation}) => {
+
+  const { currentUserObject } = useContext(AppContext);
 
   const [showDialog, setShowDialog] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const [room, setRoom] = useState({});
   const [groupList, setGroupList] = useState([]);
   const [connectionCards, setConnectionCards] = useState([])
-  const [userId] = useState(firebase.auth().currentUser.uid);
-  const [currentUserObject, setCurrentUserObject] = useState({})
 
   const hideDialog = () => setShowDialog(false)
 
@@ -61,7 +62,7 @@ const MealSync = ({navigation}) => {
       return acc; 
     }, {});
     //add current user to groupList
-    Object.assign(formattedGroupList, currentUserObject)
+    Object.assign(formattedGroupList, {[currentUserObject.connectionId]: currentUserObject.displayName})
     let key = firebase.database().ref('/mealsync-groups').push().key;    
     let mealSyncObj = {
       key,
@@ -108,15 +109,10 @@ const MealSync = ({navigation}) => {
 
   const retrieveConnections =  () => {
     let connectionsList: Array<Object> = [];
-    firebase.database().ref('/users/'+userId).once('value', (snapshot) => {
-      let snapshotJSON = snapshot.val();
-      let userConnectionId = snapshotJSON.connectionId;
-      setCurrentUserObject({[snapshotJSON.connectionId]: snapshotJSON.displayName})
-      for (const [key, value] of Object.entries(snapshotJSON.connections)) 
+      for (const [key, value] of Object.entries(currentUserObject.connections)) 
       {
         connectionsList.push({username: key, connectionId: value})  
       }
-    })
     setConnectionCards(connectionsList);
   }
 

@@ -11,7 +11,9 @@ const AppContextProvider = ({ children }) => {
   const retrieveUserFromDB = () => {
     let currentUserId = firebase.auth().currentUser.uid;
     firebase.database().ref('/users/' + currentUserId).once('value', (snapshot) => {
-      setCurrentUserObject(snapshot.val())
+      let snapshotObj = snapshot.val();
+      Object.assign(snapshotObj, {uid: snapshot.key})
+      setCurrentUserObject(snapshotObj)
     })
   }
 

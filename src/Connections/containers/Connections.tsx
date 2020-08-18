@@ -16,7 +16,6 @@ const Connections = ({ navigation }) => {
   const [addConnectionDialog, setAddConnectionDialog] = useState(false)
   const [errorDialog, setErrorDialog] = useState(false)
   const [connectionSearchResults, setConnectionSearchResults] = useState('')
-  const [userId] = useState(firebase.auth().currentUser.uid)
   const [userDisplayName] = useState(firebase.auth().currentUser.displayName)
 
   useEffect( () => {
@@ -64,7 +63,7 @@ const Connections = ({ navigation }) => {
               alert('Does not exist')
             } else {
               snapshot.forEach(async (connection) => {
-              let currentUserQuery = firebase.database().ref("/users/" + userId).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
+              let currentUserQuery = firebase.database().ref("/users/" + currentUserObject.uid).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
               let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(currentUserObject.connectionId)
               await Promise.all([currentUserQuery, targetUserQuery]);  
               alert('Success');
