@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, FlatList, ScrollView } from 'react-native'
+import { View, FlatList, ScrollView, Keyboard } from 'react-native'
 import { Headline, Paragraph, Button, Title, Dialog, Portal, Text } from 'react-native-paper';
 import * as firebase from 'firebase'
 
@@ -65,7 +65,8 @@ const Connections = ({ navigation }) => {
               snapshot.forEach(async (connection) => {
               let currentUserQuery = firebase.database().ref("/users/" + currentUserObject.uid).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
               let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(currentUserObject.connectionId)
-              await Promise.all([currentUserQuery, targetUserQuery]);  
+              await Promise.all([currentUserQuery, targetUserQuery]);
+              Keyboard.dismiss();  
               alert('Success');
               })
             }
@@ -76,6 +77,7 @@ const Connections = ({ navigation }) => {
       } 
     }
     else {
+      Keyboard.dismiss();  
       setErrorDialog(true)
     }
   }
