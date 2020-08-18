@@ -400,7 +400,3 @@ export default class MealSyncCardsContainer extends Component {
     )
   }
 }
-
-// <View style={globalStyles.dividerDiv}>
-// <Headline> Meal Sync Groups </Headline>
-// </View>

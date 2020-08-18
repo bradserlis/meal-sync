@@ -71,10 +71,4 @@ const AddConnection = (props) => {
   )
 }
 
-
-        // <TextInput 
-        // label='Connection ID'
-        // keyboardType={'numeric'}
-        // render={props =>
-
 export default AddConnection;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { 
   Paragraph, 
@@ -12,25 +12,18 @@ import {
 import * as firebase from 'firebase'
 
 import {globalStyles} from '../../globalStyles';
+import { AppContext } from '../../../context/AppContext';
 
 const Home = (props) => {
 
-  const [userId] = useState(firebase.auth().currentUser.uid)
-  const [connectionId, setConnectionId] = useState('')
+  const { currentUserObject, retrieveUserFromDB } = useContext(AppContext);
   
   useEffect(() => {
-    firebase
-    .database()
-    .ref("/users/" + userId)
-    .child("connectionId")
-    .once("value")
-    .then(snapshot => {
-      setConnectionId(snapshot.val())
-    })
-  },[connectionId])
+    if(currentUserObject !== null){
+      retrieveUserFromDB()
+    }
+  }, [])
   
-  const {navigate} = props.navigation;
-
   return(
     <View style={globalStyles.container}>
     <View style={globalStyles.dividerDiv}>
@@ -39,7 +32,7 @@ const Home = (props) => {
       <Paragraph> Now that you are logged in, let's start swiping on food... </Paragraph>
       <View style={globalStyles.footerStyle}>
       <Surface style={styles.surface}>
-        <Paragraph style={{fontSize: 18, fontWeight: '400'}}> Your Connection ID: <Paragraph style={{fontWeight:'bold', fontSize: 18, letterSpacing: 2.2}}> {connectionId} </Paragraph></Paragraph>
+        <Paragraph style={{fontSize: 18, fontWeight: '400'}}> Your Connection ID: <Paragraph style={{fontWeight:'bold', fontSize: 18, letterSpacing: 2.2}}> {currentUserObject.connectionId} </Paragraph></Paragraph>
         </Surface>
       </View>
     </View>
