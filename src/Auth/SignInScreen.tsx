@@ -12,7 +12,6 @@ const SignInScreen = ({navigation}) => {
   let handleSignIn = () => {
     try {
       firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
-        alert('signed in properly!');
         navigation.navigate('Home')
       }).catch(error => {
         switch(error.code){

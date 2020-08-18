@@ -6,16 +6,17 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 
+import { AppContextProvider } from './context/AppContext';
 import Router from './src/Navigation/Router';
 import Landing from './src/Landing/Landing';
 
 const firebaseconfig = {
-  apiKey: "AIzaSyA9ptyDdBBYw49DsjQlFEgsnSmkIyvRVE8",
-  authDomain: "meal-sync.firebaseapp.com",
-  databaseURL: "https://meal-sync.firebaseio.com",
-  projectId: "meal-sync",
-  storageBucket: "meal-sync.appspot.com",
-  messagingSenderId: "180385339533"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 };
 
 firebase.initializeApp(firebaseconfig);
@@ -43,7 +44,9 @@ class App extends Component {
     return (
       <SafeAreaView style={{ display: 'flex', flex: 1 }}>
         <PaperProvider>
+        <AppContextProvider>
           <Router />
+        </AppContextProvider>
         </PaperProvider>
       </SafeAreaView>
     )
