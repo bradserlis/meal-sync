@@ -58,11 +58,11 @@ const MealSync = ({navigation}) => {
 
   let createNewGroup = async () => {
     let formattedGroupList = groupList.reduce((acc, connection) => {
-      acc[connection.connectionId] = connection.username;
+      acc[connection.username] = connection.connectionId;
       return acc; 
     }, {});
     //add current user to groupList
-    Object.assign(formattedGroupList, {[currentUserObject.connectionId]: currentUserObject.displayName})
+    Object.assign(formattedGroupList, {[currentUserObject.displayName]: currentUserObject.connectionId})
     let key = firebase.database().ref('/mealsync-groups').push().key;    
     let mealSyncObj = {
       key,
