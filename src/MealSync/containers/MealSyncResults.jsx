@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
 import { Paragraph, Title, Headline, Button } from 'react-native-paper';
 
@@ -8,16 +8,18 @@ import { AppContext } from '../../../context/AppContext';
 
 const MealSyncResults = ({ navigation }) => {
     const { currentUserObject } = useContext(AppContext);
+    const [results, setResults] = useState({})
 
     let getResults = () => {
-        console.log('sanity check - currentUserObject', currentUserObject.connectionId)
         firebase
         .database()
         .ref('mealsync-groups')
         .orderByChild('users/'+currentUserObject.displayName)
         .equalTo(currentUserObject.connectionId)
         .once('value', snapshot => {
-            console.log('snapshot!', snapshot)    
+            snapshot.forEach((item) => {
+                setResults(item.val())
+            })    
         })
     }
 
@@ -28,18 +30,22 @@ const MealSyncResults = ({ navigation }) => {
                     <Headline> Results </Headline>
                 </View>
                 <Button
-                    mode='outlined'
+                    mode='contained'
                     dark={true}
                     onPress={getResults}
                 >
                     Check Results
                 </Button>
+                { results.key && (
+                    <View>
+                    <Paragraph> There are results </Paragraph>
+                    </View>
+                )}
                 <View style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end' }}>
                         <Button
                             style={{ display: 'flex', alignSelf: 'center', alignItems: 'center' }}
-                            mode='outlined'
-                            dark={true}
+                            mode='contained'
                             onPress={() => navigation.navigate('MealSync')}
                         >
                             Go Back
