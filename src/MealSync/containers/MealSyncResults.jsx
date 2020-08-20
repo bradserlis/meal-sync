@@ -30,7 +30,7 @@ const MealSyncResults = ({ navigation }) => {
                     <Headline> Results </Headline>
                 </View>
                 <Button
-                    mode='outlined'
+                    mode='contained'
                     dark={true}
                     onPress={getResults}
                 >
@@ -45,8 +45,7 @@ const MealSyncResults = ({ navigation }) => {
                     <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end' }}>
                         <Button
                             style={{ display: 'flex', alignSelf: 'center', alignItems: 'center' }}
-                            mode='outlined'
-                            dark={true}
+                            mode='contained'
                             onPress={() => navigation.navigate('MealSync')}
                         >
                             Go Back
