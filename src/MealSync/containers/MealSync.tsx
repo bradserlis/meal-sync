@@ -174,7 +174,7 @@ const MealSync = ({navigation}) => {
 const styles = StyleSheet.create({
   buttonStyle: {
     width: dimensions.fullWidth/2.5,
-    backgroundColor:'skyblue', 
+    backgroundColor:'rgb(0,120,220)', 
     height: 300, 
     justifyContent: 'center', 
     alignSelf:'center', 
