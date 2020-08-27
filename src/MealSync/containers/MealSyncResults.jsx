@@ -8,9 +8,23 @@ import { AppContext } from '../../../context/AppContext';
 
 const MealSyncResults = ({ navigation }) => {
     const { currentUserObject } = useContext(AppContext);
+    const [mealSyncObject, setMealSyncObject] = useState({})
     const [results, setResults] = useState({})
+    const [incompleteResults, setIncompleteResults] = useState(true);
 
-    let getResults = () => {
+    const getResults = async () => {
+        // create the mealsyncobject(room) - key, users, results, location
+        await getMealSyncObject();
+        // check if all users have responded or not
+        if(verifyAllUsersResponded()){
+            setIncompleteResults(false)
+        }
+        else {
+            setIncompleteResults(true)
+        }
+    }
+
+    const getMealSyncObject = () => {
         firebase
         .database()
         .ref('mealsync-groups')
@@ -18,9 +32,20 @@ const MealSyncResults = ({ navigation }) => {
         .equalTo(currentUserObject.connectionId)
         .once('value', snapshot => {
             snapshot.forEach((item) => {
-                setResults(item.val())
+                setMealSyncObject(item.val())
             })    
         })
+    }
+
+    const verifyAllUsersResponded = () => {
+        //check if all users assigned to that mealsync object...
+        for (let [key, val] of Object.entries(mealSyncObject.users)){
+            // have a corresponding results object
+            if(!mealSyncObject.results.hasOwnProperty(val)){
+                return false
+            }
+        }
+        return true
     }
 
     return (
@@ -36,11 +61,19 @@ const MealSyncResults = ({ navigation }) => {
                 >
                     Check Results
                 </Button>
-                { results.key && (
-                    <View>
-                    <Paragraph> There are results </Paragraph>
-                    </View>
-                )}
+                { 
+                    incompleteResults === true && (
+                        <View style={{display: 'flex', flex: 1, alignSelf: 'center', justifyContent: 'center'}}>
+                            <Title>Sorry, not all users have completed swiping. Try again? </Title>
+                        </View>
+                    )}
+                {
+                    incompleteResults === false && (
+                        <View>
+                            <Title>Results for Everyone</Title>
+                        </View>
+                    )
+                } 
                 <View style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end' }}>
                         <Button
