@@ -322,7 +322,6 @@ export default class MealSyncCardsContainer extends Component {
   }
 
   componentDidMount = () => {
-    console.log('did context work?', this.context)
     // !this.state.nearbyResults && /*this.getMealSyncCards()
     this.state.nearbyResults && this.state.nearbyResults.map((result) => {
     })
@@ -393,9 +392,10 @@ export default class MealSyncCardsContainer extends Component {
   }
 
   render() {
-    console.log('sanity check - room props', this.props.navigation.state.params.room.key)
+    // console.log('sanity check - room props', this.props.navigation)
 
     return (
+
       <View style={{
         display: 'flex',
         flex: 1,
