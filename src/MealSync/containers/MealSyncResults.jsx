@@ -62,13 +62,12 @@ const MealSyncResults = ({ navigation }) => {
                     Check Results
                 </Button>
                 { 
-                    incompleteResults === true && (
+                    incompleteResults ? (
                         <View style={{display: 'flex', flex: 1, alignSelf: 'center', justifyContent: 'center'}}>
                             <Title>Sorry, not all users have completed swiping. Try again? </Title>
                         </View>
-                    )}
-                {
-                    incompleteResults === false && (
+                    ) :
+                    (
                         <View>
                             <Title>Results for Everyone</Title>
                         </View>
