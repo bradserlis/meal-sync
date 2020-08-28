@@ -29,19 +29,17 @@ const MealSync = ({navigation}) => {
 
   const [showDialog, setShowDialog] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
-  const [room, setRoom] = useState({});
   const [groupList, setGroupList] = useState([]);
   const [connectionCards, setConnectionCards] = useState([])
-
-  const hideDialog = () => setShowDialog(false)
-
-  const openDialog = () => setShowDialog(true)
   
   useEffect(() => {
     retrieveConnections();
     getLocation();
   }, [])
 
+  const hideDialog = () => setShowDialog(false)
+  const openDialog = () => setShowDialog(true)
+  
   const resetDialog = () => {
     retrieveConnections();
     setGroupList([])
@@ -56,7 +54,44 @@ const MealSync = ({navigation}) => {
     setUserLocation(location);
   }
 
-  let createNewGroup = async () => {
+  const getUserRoom = async () => {
+    let userRoomSnapshot = await getUserRoomQuery()
+      if(!userRoomSnapshot.exists()){
+        return null
+      }
+      let dataObj = {};
+      userRoomSnapshot.forEach((item) => {
+        Object.assign(dataObj, item.val())
+        // firebase.database().ref('/mealsync-groups-historical/'+item.key).set(dataObj);
+        // removeFormerMealSyncFromDB(item.key);
+      })
+      return dataObj
+  }
+
+  const getUserRoomQuery = () => {
+    return firebase
+    .database()
+    .ref('mealsync-groups')
+    .orderByChild('users/'+currentUserObject.displayName)
+    .equalTo(currentUserObject.connectionId)
+    .once('value') 
+  }
+
+  const removeFormerMealSyncFromDB = (key: string | null) => {
+    firebase.database().ref('/mealsync-groups/'+ key).remove()
+  }
+  
+  const handleCreateGroup = async () => {
+    let room: null | object = await getUserRoom();
+    if(!room) {
+      let roomObj = await createNewGroup();
+      navigation.navigate('MealSyncCardsContainer', {room: roomObj})
+    } else {
+      navigation.navigate('MealSyncCardsContainer', {room: room})
+    }
+  }
+  
+  const createNewGroup = async () => {
     let formattedGroupList = groupList.reduce((acc, connection) => {
       acc[connection.username] = connection.connectionId;
       return acc; 
@@ -77,11 +112,6 @@ const MealSync = ({navigation}) => {
     return mealSyncObj;
   }
 
-  const handleCreateGroup = async () => {
-    let roomObj = await createNewGroup();
-    navigation.navigate('MealSyncCardsContainer', {room: roomObj})
-    alert('Added Group');
-  }
 
   const addConnectionToGroup = (connection) => {
     setGroupList([...groupList, connection]);
