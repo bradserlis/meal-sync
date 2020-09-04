@@ -25,6 +25,13 @@ import { AppContext } from '../../../context/AppContext';
 
 const MealSync = ({navigation}) => {
 
+  interface IRoom {
+    key: String,
+    location: Object,
+    users: Object,
+    results?: Object
+  }
+
   const { currentUserObject } = useContext(AppContext);
 
   const [showDialog, setShowDialog] = useState(false);
@@ -77,17 +84,31 @@ const MealSync = ({navigation}) => {
     .once('value') 
   }
 
+  const checkUserHasCompletedMealSync = (room) => {
+    if(room.results){
+      return currentUserObject.connectionId in room['results']
+    }
+    return false
+  }
+
   const removeFormerMealSyncFromDB = (key: string | null) => {
     firebase.database().ref('/mealsync-groups/'+ key).remove()
   }
   
   const handleCreateGroup = async () => {
     let room: null | object = await getUserRoom();
+    console.log(room)
     if(!room) {
       let roomObj = await createNewGroup();
       navigation.navigate('MealSyncCardsContainer', {room: roomObj})
     } else {
-      navigation.navigate('MealSyncCardsContainer', {room: room})
+      if(checkUserHasCompletedMealSync(room)){
+        alert('already finished this meal sync');
+        navigation.navigate('MealSyncResults');
+      }
+      else{
+        navigation.navigate('MealSyncCardsContainer', {room: room});
+      }
     }
   }
   
@@ -137,7 +158,7 @@ const MealSync = ({navigation}) => {
     )
   }
 
-  const retrieveConnections =  () => {
+  const retrieveConnections = () => {
     let connectionsList: Array<Object> = [];
       for (const [key, value] of Object.entries(currentUserObject.connections)) 
       {
