@@ -12,29 +12,37 @@ const MealSyncResults = ({ navigation }) => {
     const [results, setResults] = useState({})
     const [incompleteResults, setIncompleteResults] = useState(true);
 
-    const getResults = async () => {
-        // create the mealsyncobject(room) - key, users, results, location
-        await getMealSyncObject();
-        // check if all users have responded or not
-        if(verifyAllUsersResponded()){
-            setIncompleteResults(false)
+    useEffect(() => {
+        const setResults = async () => {
+            await setMealSyncResults();
         }
-        else {
-            setIncompleteResults(true)
-        }
+        setResults();
+    }, [])
+
+    const setMealSyncResults = async () => {
+        let mealSyncQuerySnapshot = await getMealSyncQuery();
+        let dataObj = {};
+        mealSyncQuerySnapshot.forEach((item) => {
+            Object.assign(dataObj, item.val())
+        })
+        setMealSyncObject(dataObj);
     }
 
-    const getMealSyncObject = () => {
-        firebase
+    const getMealSyncQuery = () => {
+        return firebase
         .database()
         .ref('mealsync-groups')
         .orderByChild('users/'+currentUserObject.displayName)
         .equalTo(currentUserObject.connectionId)
-        .once('value', snapshot => {
-            snapshot.forEach((item) => {
-                setMealSyncObject(item.val())
-            })    
-        })
+        .once('value')
+    }
+
+    const refreshResults = () => {
+        if(verifyAllUsersResponded() === true){
+            return setIncompleteResults(false)
+        } else {
+            alert('Some users have not finished responding to your Meal Sync. Please try again.')
+        }
     }
 
     const verifyAllUsersResponded = () => {
@@ -57,14 +65,14 @@ const MealSyncResults = ({ navigation }) => {
                 <Button
                     mode='contained'
                     dark={true}
-                    onPress={getResults}
+                    onPress={refreshResults}
                 >
                     Check Results
                 </Button>
                 { 
                     incompleteResults ? (
                         <View style={{display: 'flex', flex: 1, alignSelf: 'center', justifyContent: 'center'}}>
-                            <Title>Sorry, not all users have completed swiping. Try again? </Title>
+                            <Title>Click "Check Results" above to check if all users have submitted answers</Title>
                         </View>
                     ) :
                     (
