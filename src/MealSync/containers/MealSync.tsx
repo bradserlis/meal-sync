@@ -98,22 +98,22 @@ const MealSync = ({ navigation }) => {
   }
 
   const checkUserHasCompletedMealSync = () => {
-    if(room !== null){
       // check if there are finished results on this room object
       if (room.results){
         // if there are, return whether current user results are present
         return currentUserObject.connectionId in room['results']
       }
-    }
     // fallback to false if no results
     return false
   }
 
   const shouldShowDialogCheck = () => {
-    // if no results on room or no current user results on room...
+    if(room === null) {
+      return openDialog();
+    }
+    // if no current user results on room...
     if(checkUserHasCompletedMealSync() === false){
-      // open dialog to create new room
-      openDialog(); 
+      navigation.navigate('MealSyncCardsContainer', {room: room})
     } else {
       // user already has results on room object -- move to results screen
       alert('already finished this meal sync');
