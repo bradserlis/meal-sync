@@ -21,7 +21,6 @@ const MealSyncResults = ({ navigation }) => {
 
     const setMealSyncResults = async () => {
         let mealSyncQuerySnapshot = await getMealSyncQuery();
-        console.log('what is mealSyncQuerySnapshot', mealSyncQuerySnapshot);
         let dataObj = {};
         mealSyncQuerySnapshot.forEach((item) => {
             Object.assign(dataObj, item.val())
@@ -47,7 +46,6 @@ const MealSyncResults = ({ navigation }) => {
     }
 
     const verifyAllUsersResponded = () => {
-        console.log('sanity check - is mealsyncObject.users a thing', mealSyncObject.users)
         //check if all users assigned to that mealsync object...
         for (let [key, val] of Object.entries(mealSyncObject.users)){
             // have a corresponding results object
