@@ -47,7 +47,6 @@ const MealSync = ({ navigation }) => {
     
     async function fetchUserRoom() {
       if(await getUserRoom() !== null){
-        console.log('room exists?');
         setRoom(await getUserRoom());
       }
       else {
