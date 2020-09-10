@@ -2,22 +2,20 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
 import { Paragraph, Title, Headline, Button } from 'react-native-paper';
 
+import MealSyncResults from '../components/MealSyncResults';
 import { globalStyles } from '../../globalStyles';
 import * as firebase from 'firebase';
 import { AppContext } from '../../../context/AppContext';
 
-const MealSyncResults = ({ navigation }) => {
+const MealSyncResultsContainer = ({ navigation }) => {
     const { currentUserObject } = useContext(AppContext);
     const [mealSyncObject, setMealSyncObject] = useState({})
-    const [results, setResults] = useState({})
+    const [results, setResults] = useState([])
     const [incompleteResults, setIncompleteResults] = useState(true);
 
     useEffect(() => {
-        const setResults = async () => {
-            await setMealSyncResults();
-        }
-        setResults();
-    }, [])
+        setMealSyncResults();
+    }, []);
 
     const setMealSyncResults = async () => {
         let mealSyncQuerySnapshot = await getMealSyncQuery();
@@ -25,31 +23,39 @@ const MealSyncResults = ({ navigation }) => {
         mealSyncQuerySnapshot.forEach((item) => {
             Object.assign(dataObj, item.val())
         })
-        setMealSyncObject(dataObj);
+        setSyncedResults(dataObj);
+    }
+
+    const setSyncedResults = (mealSyncObject) => {
+        if(!verifyAllUsersResponded(mealSyncObject)){
+            return setResults(null)
+        }
+        let restaurantVotes = Object.values(mealSyncObject.results);
+        let aggregateRestaurantVotes = restaurantVotes.reduce((aggregateRestaurantVotes, userRestaurantVotes) => {
+            for (let restaurant in userRestaurantVotes) {
+                aggregateRestaurantVotes[restaurant] = aggregateRestaurantVotes[restaurant] && userRestaurantVotes[restaurant];
+            }
+            return aggregateRestaurantVotes;
+        })
+        let restarauntNames = Object.keys(aggregateRestaurantVotes);
+        let restaurantPicks = restarauntNames.filter(restaurantName => aggregateRestaurantVotes[restaurantName])
+        setResults(restaurantPicks)
     }
 
     const getMealSyncQuery = () => {
         return firebase
-        .database()
-        .ref('mealsync-groups')
-        .orderByChild('users/'+currentUserObject.displayName)
-        .equalTo(currentUserObject.connectionId)
-        .once('value')
+            .database()
+            .ref('mealsync-groups')
+            .orderByChild('users/' + currentUserObject.displayName)
+            .equalTo(currentUserObject.connectionId)
+            .once('value')
     }
 
-    const refreshResults = () => {
-        if(verifyAllUsersResponded() === true){
-            return setIncompleteResults(false)
-        } else {
-            alert('Some users have not finished responding to your Meal Sync. Please try again.')
-        }
-    }
-
-    const verifyAllUsersResponded = () => {
+    const verifyAllUsersResponded = (mealSyncObject) => {
         //check if all users assigned to that mealsync object...
-        for (let [key, val] of Object.entries(mealSyncObject.users)){
+        for (let [key, val] of Object.entries(mealSyncObject.users)) {
             // have a corresponding results object
-            if(!mealSyncObject.results.hasOwnProperty(val)){
+            if (!mealSyncObject.results.hasOwnProperty(val)) {
                 return false
             }
         }
@@ -65,22 +71,11 @@ const MealSyncResults = ({ navigation }) => {
                 <Button
                     mode='contained'
                     dark={true}
-                    onPress={refreshResults}
+                    onPress={setMealSyncResults}
                 >
                     Check Results
                 </Button>
-                { 
-                    incompleteResults ? (
-                        <View style={{display: 'flex', flex: 1, alignSelf: 'center', justifyContent: 'center'}}>
-                            <Title>Click "Check Results" above to check if all users have submitted answers</Title>
-                        </View>
-                    ) :
-                    (
-                        <View>
-                            <Title>Results for Everyone</Title>
-                        </View>
-                    )
-                } 
+                <MealSyncResults results={results} />
                 <View style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end' }}>
                         <Button
@@ -97,4 +92,4 @@ const MealSyncResults = ({ navigation }) => {
     )
 }
 
-export default MealSyncResults;
+export default MealSyncResultsContainer;
