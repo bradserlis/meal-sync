@@ -18,7 +18,7 @@ import * as firebase from 'firebase';
 import * as Location from 'expo-location';
 
 import { globalStyles, dimensions } from '../../globalStyles'
-import MealSyncResults from './MealSyncResults';
+import MealSyncResultsContainerContainer from './MealSyncResultsContainer';
 import MealSyncCardsContainer from './MealSyncCardsContainer';
 import { AppContext } from '../../../context/AppContext';
 
@@ -116,7 +116,7 @@ const MealSync = ({ navigation }) => {
     } else {
       // user already has results on room object -- move to results screen
       alert('already finished this meal sync');
-      navigation.navigate('MealSyncResults');
+      navigation.navigate('MealSyncResultsContainer');
     };
   };
 
@@ -235,7 +235,7 @@ const MealSync = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyle}
-            onPress={() => navigation.navigate('MealSyncResults')}
+            onPress={() => navigation.navigate('MealSyncResultsContainer')}
           >
             <Title style={[styles.buttonTextStyle, styles.buttonTextEmphasisStyle]}>See</Title>
             <Title style={styles.buttonTextStyle}> Previous Results </Title>
