@@ -378,11 +378,11 @@ export default class MealSyncCardsContainer extends Component {
   }
 
   onSwipeLeft = (name: string) => {
-    this.swipeLogic(name, 1)
+    this.swipeLogic(name, 0)
   }
 
   onSwipeRight = (name: string) => {
-    this.swipeLogic(name, 0)
+    this.swipeLogic(name, 1)
   }
 
   handleFinishSwiping = () => {
