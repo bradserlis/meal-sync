@@ -9,7 +9,7 @@ import AddConnection from './AddConnection'
 import { AppContext } from '../../../context/AppContext';
 
 const Connections = ({ navigation }) => {
-  const { currentUserObject } = useContext(AppContext);
+  const { currentUserObject, retrieveUserFromDB } = useContext(AppContext);
 
   const [connectionCards, setConnectionCards] = useState([])
   const [showDialog, setShowDialog] = useState(false)
@@ -18,7 +18,7 @@ const Connections = ({ navigation }) => {
   const [connectionSearchResults, setConnectionSearchResults] = useState('')
   const [userDisplayName] = useState(firebase.auth().currentUser.displayName)
 
-  useEffect( () => {
+  useEffect(() => {
     retrieveConnections();  
   }, [])
 
@@ -47,6 +47,18 @@ const Connections = ({ navigation }) => {
     return connectionCards.some(connection => connection.connectionId === connectionSearchResults)
   }
 
+  const addConnectionToTemporary = (targetUsername, targetConnectionId) => {
+    let connectionsList: Array<Object> = [{
+      username: targetUsername,
+      connectionId: targetConnectionId 
+    }];
+    for(let [key, value] of Object.entries(currentUserObject.connections)){
+      connectionsList.push({username: key, connectionId: value})
+    }
+    setConnectionCards(connectionsList);
+    retrieveUserFromDB();  
+  }
+
   let addConnectionId = () => {
     setAddConnectionDialog(false)
     if(!checkForConnection()){
@@ -58,17 +70,19 @@ const Connections = ({ navigation }) => {
           .orderByChild("connectionId")
           .equalTo(connectionSearchResults)
           .limitToFirst(1)
-          .on("value", snapshot => {
+          .once("value", snapshot => {
             if(snapshot.exists() === false){
               alert('Does not exist')
             } else {
               snapshot.forEach(async (connection) => {
-              let currentUserQuery = firebase.database().ref("/users/" + currentUserObject.uid).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
+              let targetUsername = connection.toJSON().displayName;
+              let currentUserQuery = firebase.database().ref("/users/" + currentUserObject.uid).child("connections").child(targetUsername).set(connectionSearchResults)
               let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(currentUserObject.connectionId)
               await Promise.all([currentUserQuery, targetUserQuery]);
               Keyboard.dismiss();  
-              alert('Success');
+              addConnectionToTemporary(targetUsername, connectionSearchResults);
               })
+              alert('Success');
             }
           })
       } 
@@ -116,7 +130,9 @@ const Connections = ({ navigation }) => {
           )}  
         </Dialog>
       </Portal>
-        <YourConnections connections={connectionCards} />
+        <YourConnections 
+          connections={connectionCards}
+        />
         <AddConnection 
           toggleShowDialog={toggleShowDialog} 
           createConnection={createConnection} 
@@ -127,3 +143,6 @@ const Connections = ({ navigation }) => {
 }
 
 export default Connections;
+
+
+// look into updating connectionCards state, to force YourConnections component to re-render
