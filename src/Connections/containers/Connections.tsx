@@ -9,7 +9,7 @@ import AddConnection from './AddConnection'
 import { AppContext } from '../../../context/AppContext';
 
 const Connections = ({ navigation }) => {
-  const { currentUserObject } = useContext(AppContext);
+  const { currentUserObject, retrieveUserFromDB } = useContext(AppContext);
 
   const [connectionCards, setConnectionCards] = useState([])
   const [showDialog, setShowDialog] = useState(false)
@@ -47,28 +47,38 @@ const Connections = ({ navigation }) => {
     return connectionCards.some(connection => connection.connectionId === connectionSearchResults)
   }
 
+  const addConnectionToTemporary = async () => {
+    console.log('what is currentUserObject', currentUserObject)
+    await retrieveUserFromDB();
+    retrieveConnections();
+  }
+
   let addConnectionId = () => {
     setAddConnectionDialog(false)
     if(!checkForConnection()){
       try {
         toggleShowDialog()
+        console.log('before query');
         firebase
           .database()
           .ref("users")
           .orderByChild("connectionId")
           .equalTo(connectionSearchResults)
           .limitToFirst(1)
-          .on("value", snapshot => {
+          .once("value", snapshot => {
             if(snapshot.exists() === false){
               alert('Does not exist')
             } else {
+              console.log('check to see if logged twice');
               snapshot.forEach(async (connection) => {
+              console.log('what is snapshot', snapshot);
               let currentUserQuery = firebase.database().ref("/users/" + currentUserObject.uid).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
               let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(currentUserObject.connectionId)
               await Promise.all([currentUserQuery, targetUserQuery]);
               Keyboard.dismiss();  
-              alert('Success');
               })
+              addConnectionToTemporary();
+              alert('Success');
             }
           })
       } 
@@ -127,3 +137,6 @@ const Connections = ({ navigation }) => {
 }
 
 export default Connections;
+
+
+// look into updating connectionCards state, to force YourConnections component to re-render
