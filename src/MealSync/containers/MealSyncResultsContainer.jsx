@@ -16,6 +16,15 @@ const MealSyncResultsContainer = ({ navigation }) => {
     useEffect(() => {
         setMealSyncResults();
     }, []);
+    
+    const getMealSyncQuery = () => {
+        return firebase
+            .database()
+            .ref('mealsync-groups')
+            .orderByChild('users/' + currentUserObject.displayName)
+            .equalTo(currentUserObject.connectionId)
+            .once('value')
+    }
 
     const setMealSyncResults = async () => {
         let mealSyncQuerySnapshot = await getMealSyncQuery();
@@ -24,6 +33,17 @@ const MealSyncResultsContainer = ({ navigation }) => {
             Object.assign(dataObj, item.val())
         })
         setSyncedResults(dataObj);
+    }
+
+    const verifyAllUsersResponded = (mealSyncObject) => {
+        //check if all users assigned to that mealsync object...
+        for (let [key, val] of Object.entries(mealSyncObject.users)) {
+            // have a corresponding results object
+            if (!mealSyncObject.results.hasOwnProperty(val)) {
+                return false
+            }
+        }
+        return true
     }
 
     const setSyncedResults = (mealSyncObject) => {
@@ -41,27 +61,7 @@ const MealSyncResultsContainer = ({ navigation }) => {
         let restaurantPicks = restarauntNames.filter(restaurantName => aggregateRestaurantVotes[restaurantName])
         setResults(restaurantPicks)
     }
-
-    const getMealSyncQuery = () => {
-        return firebase
-            .database()
-            .ref('mealsync-groups')
-            .orderByChild('users/' + currentUserObject.displayName)
-            .equalTo(currentUserObject.connectionId)
-            .once('value')
-    }
-
-    const verifyAllUsersResponded = (mealSyncObject) => {
-        //check if all users assigned to that mealsync object...
-        for (let [key, val] of Object.entries(mealSyncObject.users)) {
-            // have a corresponding results object
-            if (!mealSyncObject.results.hasOwnProperty(val)) {
-                return false
-            }
-        }
-        return true
-    }
-
+    
     return (
         <View>
             <View style={globalStyles.container}>
