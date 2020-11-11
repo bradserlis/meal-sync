@@ -18,7 +18,7 @@ const Connections = ({ navigation }) => {
   const [connectionSearchResults, setConnectionSearchResults] = useState('')
   const [userDisplayName] = useState(firebase.auth().currentUser.displayName)
 
-  useEffect( () => {
+  useEffect(() => {
     retrieveConnections();  
   }, [])
 
@@ -47,10 +47,16 @@ const Connections = ({ navigation }) => {
     return connectionCards.some(connection => connection.connectionId === connectionSearchResults)
   }
 
-  const addConnectionToTemporary = async () => {
-    console.log('what is currentUserObject', currentUserObject)
-    await retrieveUserFromDB();
-    retrieveConnections();
+  const addConnectionToTemporary = (targetUsername, targetConnectionId) => {
+    let connectionsList: Array<Object> = [{
+      username: targetUsername,
+      connectionId: targetConnectionId 
+    }];
+    for(let [key, value] of Object.entries(currentUserObject.connections)){
+      connectionsList.push({username: key, connectionId: value})
+    }
+    setConnectionCards(connectionsList);
+    retrieveUserFromDB();  
   }
 
   let addConnectionId = () => {
@@ -58,7 +64,6 @@ const Connections = ({ navigation }) => {
     if(!checkForConnection()){
       try {
         toggleShowDialog()
-        console.log('before query');
         firebase
           .database()
           .ref("users")
@@ -69,15 +74,14 @@ const Connections = ({ navigation }) => {
             if(snapshot.exists() === false){
               alert('Does not exist')
             } else {
-              console.log('check to see if logged twice');
               snapshot.forEach(async (connection) => {
-              console.log('what is snapshot', snapshot);
-              let currentUserQuery = firebase.database().ref("/users/" + currentUserObject.uid).child("connections").child(connection.toJSON().displayName).set(connectionSearchResults)
+              let targetUsername = connection.toJSON().displayName;
+              let currentUserQuery = firebase.database().ref("/users/" + currentUserObject.uid).child("connections").child(targetUsername).set(connectionSearchResults)
               let targetUserQuery = firebase.database().ref("/users/" + connection.key).child("connections").child(userDisplayName).set(currentUserObject.connectionId)
               await Promise.all([currentUserQuery, targetUserQuery]);
               Keyboard.dismiss();  
+              addConnectionToTemporary(targetUsername, connectionSearchResults);
               })
-              addConnectionToTemporary();
               alert('Success');
             }
           })
@@ -126,7 +130,9 @@ const Connections = ({ navigation }) => {
           )}  
         </Dialog>
       </Portal>
-        <YourConnections connections={connectionCards} />
+        <YourConnections 
+          connections={connectionCards}
+        />
         <AddConnection 
           toggleShowDialog={toggleShowDialog} 
           createConnection={createConnection} 
