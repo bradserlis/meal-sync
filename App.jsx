@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Button, SafeAreaView, AsyncStorage } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,8 +19,8 @@ const firebaseconfig = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 };
 
-firebase.initializeApp(firebaseconfig);
 
+firebase.initializeApp(firebaseconfig);
 
 class App extends Component {
   state={
