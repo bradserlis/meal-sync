@@ -1,33 +1,72 @@
-import React, { useState } from 'react';
-import { View, Keyboard } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Keyboard, Platform } from 'react-native';
 import { Text, Headline, TextInput, Button, Paragraph, Portal, Dialog } from 'react-native-paper';
 import * as firebase from 'firebase';
+import { Notifications } from 'expo';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions'
 
 import { globalStyles } from '../globalStyles'
 
 const SignUpScreen = ({navigation}) => {
-const [email, setEmail] = useState('');
-const [displayName, setDisplayName] = useState('')
-const [password, setPassword] = useState('');
-const [dialogVisibility, setDialogVisibility] = useState(false)
-const [dialogMessage, setDialogMessage] = useState('')
+  const [email, setEmail] = useState('');
+  const [displayName, setDisplayName] = useState('')
+  const [password, setPassword] = useState('');
+  const [dialogVisibility, setDialogVisibility] = useState(false)
+  const [dialogMessage, setDialogMessage] = useState('')
+  const [expoPushToken, setExpoPushToken] = useState('')
 
-const showDialog = () => setDialogVisibility(true);
-const hideDialog = () => setDialogVisibility(false);
+  const showDialog = () => setDialogVisibility(true);
+  const hideDialog = () => setDialogVisibility(false);
 
-let createConnectionId = (userid) => {
-  var hash = 0, i, chr;
-  for (i = 0; i < userid.length; i++) {
-    chr = userid.charCodeAt(i);
-    hash = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
+  useEffect(() => {
+    const runRegister = async () => {
+      registerForPushNotificationsAsync();
+    }
+    runRegister()
+  }, [])
+
+  const registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {        
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      const token = await Notifications.getExpoPushTokenAsync();
+      setExpoPushToken(token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  };
+
+  let createConnectionId = (userid) => {
+    var hash = 0, i, chr;
+    for (i = 0; i < userid.length; i++) {
+      chr = userid.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    let result = Math.abs(hash).toString();
+    result = result.padStart(8, "0");
+    return (result.substr(0, 4) + '-' + result.substr(4, 4))
   }
-  let result = Math.abs(hash).toString();
-  result = result.padStart(8, "0");
-  return (result.substr(0, 4) + '-' + result.substr(4, 4))
-}
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
 
     let userObj = {
       email,
@@ -36,6 +75,7 @@ let createConnectionId = (userid) => {
 
     try {
       firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password).then((result) => {
+        registerForPushNotificationsAsync();
         firebase.auth().currentUser.updateProfile({
           displayName
         }).catch(function(error) {
@@ -43,8 +83,7 @@ let createConnectionId = (userid) => {
         })
         if(result.user.uid !== null){
           let connectionId: string = createConnectionId(result.user.uid)
-          console.log(connectionId);
-          firebase.database().ref('users').child(result.user.uid).set({displayName, connectionId, connections: ''})
+          firebase.database().ref('users').child(result.user.uid).set({displayName, expoPushToken, connectionId, connections: ''})
           navigation.navigate('Home');
         }
       }).catch((error) => {

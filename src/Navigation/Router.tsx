@@ -10,7 +10,7 @@ import SignUpScreen from '../Auth/SignUpScreen';
 import MainTabNavigator from './MainTabNavigator';
 import MealSyncGroups from '../MealSync/containers/MealSyncGroups'
 import MealSyncCardsContainer from '../MealSync/containers/MealSyncCardsContainer'
-import MealSyncResults from '../MealSync/containers/MealSyncResults'
+import MealSyncResultsContainer from '../MealSync/containers/MealSyncResultsContainer'
 
 const Router = createAppContainer(createSwitchNavigator(
   {
@@ -20,7 +20,7 @@ const Router = createAppContainer(createSwitchNavigator(
     MainTabNavigator,
     MealSyncGroups,
     MealSyncCardsContainer,
-    MealSyncResults
+    MealSyncResultsContainer
   },
   {
     initialRouteName: "Landing",
