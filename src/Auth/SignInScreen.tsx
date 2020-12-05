@@ -1,17 +1,55 @@
 import React, { useState } from 'react';
-import { View, Keyboard } from 'react-native';
+import { View, Keyboard, Platform } from 'react-native';
 import { TextInput, Button, Headline, Portal, Dialog, Paragraph } from 'react-native-paper';
 import * as firebase from 'firebase';
+import { Notifications } from 'expo';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
 import authContext from '../../App';
-import Landing from '../Landing/Landing'
-import { globalStyles } from '../globalStyles'
+import Landing from '../Landing/Landing';
+import { globalStyles } from '../globalStyles';
 
 const SignInScreen = ({navigation}) => {
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [dialogVisibility, setDialogVisibility] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
+
+  const getDeviceExpoPushToken = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+    let returnedToken = await Notifications.getExpoPushTokenAsync();
+    return returnedToken;
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  }
+
   let handleSignIn = () => {
     try {
-      firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+      firebase.auth().signInWithEmailAndPassword(email, password).then(async (result) => {
+        let expoPushToken = await getDeviceExpoPushToken();
+        firebase.database().ref('users').child(result.user.uid).update({expoPushToken})
         navigation.navigate('Home')
       }).catch(error => {
         switch(error.code){
@@ -48,11 +86,6 @@ const SignInScreen = ({navigation}) => {
       console.log(e)
     }
   }
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [dialogVisibility, setDialogVisibility] = useState(false)
-  const [dialogMessage, setDialogMessage] = useState('')
 
   const showDialog = () => setDialogVisibility(true);
   const hideDialog = () => setDialogVisibility(false);

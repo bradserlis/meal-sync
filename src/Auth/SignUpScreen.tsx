@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Keyboard } from 'react-native';
+import { View, Keyboard, Platform } from 'react-native';
 import { Text, Headline, TextInput, Button, Paragraph, Portal, Dialog } from 'react-native-paper';
 import * as firebase from 'firebase';
 import { Notifications } from 'expo';
