@@ -175,6 +175,3 @@ const SignUpScreen = ({navigation}) => {
 }
 
 export default SignUpScreen;
-
-
-//  "expo": "~37.0.3",
