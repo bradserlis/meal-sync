@@ -2,11 +2,20 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, Headline} from 'react-native-paper';
 
+import * as firebase from 'firebase';
+
 import SignInScreen from '../Navigation/SignInScreen';
 import SignUpScreen from '../Navigation/SignUpScreen';
 import { globalStyles, dimensions } from '../globalStyles'
 
 const Landing = ({navigation}) => {
+
+  const handleDevSignIn = () => {
+    firebase.auth().signInWithEmailAndPassword('anotherfake@abc.com', 'Password123').then( (result) => {
+      navigation.navigate('Home')
+    })
+  }
+
   return (
     <View style={[globalStyles.container, styles.centered]}>
       <View style={styles.box}>
@@ -27,6 +36,13 @@ const Landing = ({navigation}) => {
           Sign Up
           </Button>
         </View>
+        <Button
+          style={{marginTop:20}}
+          mode='outlined'
+          onPress={handleDevSignIn}
+        >
+        Dev Sign In
+        </Button>
       </View>
     </View>
   )
