@@ -7,7 +7,7 @@ import {
 } from 'react-native-paper'
 
 import SignOutButton from '../../common/SignOutButton';
-import { globalStyles } from '../../globalStyles';
+import { globalStyles } from '../../common/globalStyles';
 import { AppContext } from '../../../context/AppContext';
 
 const Home = (props) => {

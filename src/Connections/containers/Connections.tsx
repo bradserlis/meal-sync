@@ -3,7 +3,7 @@ import { View, FlatList, ScrollView, Keyboard } from 'react-native'
 import { Headline, Paragraph, Button, Title, Dialog, Portal, Text } from 'react-native-paper';
 import * as firebase from 'firebase'
 
-import { globalStyles, dimensions } from '../../globalStyles';
+import { globalStyles, dimensions } from '../../common/globalStyles';
 import YourConnections from './YourConnections';
 import AddConnection from './AddConnection'
 import { AppContext } from '../../../context/AppContext';

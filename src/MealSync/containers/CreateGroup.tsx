@@ -4,7 +4,7 @@ import { Headline, Title, Portal, Paragraph, Button, Dialog } from 'react-native
 import * as firebase from 'firebase';
 import * as Location from 'expo-location';
 
-import { globalStyles, dimensions } from '../../globalStyles'
+import { globalStyles, dimensions } from '../../common/globalStyles'
 import YourConnections from '../../Connections/containers/YourConnections';
 
 const CreateGroup = ({navigation}) => {

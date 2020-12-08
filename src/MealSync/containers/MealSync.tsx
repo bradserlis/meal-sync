@@ -17,7 +17,7 @@ import {
 import * as firebase from 'firebase';
 import * as Location from 'expo-location';
 
-import { globalStyles, dimensions } from '../../globalStyles'
+import { globalStyles, dimensions } from '../../common/globalStyles'
 import MealSyncResultsContainerContainer from './MealSyncResultsContainer';
 import MealSyncCardsContainer from './MealSyncCardsContainer';
 import { AppContext } from '../../../context/AppContext';

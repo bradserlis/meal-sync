@@ -3,7 +3,7 @@ import { View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Paragraph, Title, Headline, TextInput, Button, Dialog, Portal } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text';
 
-import { globalStyles } from '../../globalStyles'
+import { globalStyles } from '../../common/globalStyles'
 
 const AddConnection = (props) => {
 

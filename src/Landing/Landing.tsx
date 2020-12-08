@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 
 import SignInScreen from '../Navigation/SignInScreen';
 import SignUpScreen from '../Navigation/SignUpScreen';
-import { globalStyles, dimensions } from '../globalStyles'
+import { globalStyles, dimensions } from '../common/globalStyles'
 
 const Landing = ({navigation}) => {
 
