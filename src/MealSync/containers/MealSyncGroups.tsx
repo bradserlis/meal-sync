@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Title, Headline, Paragraph, Button } from 'react-native-paper';
 
-import {globalStyles} from '../../globalStyles'
+import {globalStyles} from '../../common/globalStyles'
 import YourConnections from '../../Connections/containers/YourConnections';
 import * as firebase from 'firebase'
 

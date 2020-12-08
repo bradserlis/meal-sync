@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import { Title, Headline, Paragraph, Button } from 'react-native-paper';
 import { Container, Header, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body, Icon } from 'native-base';
 
-import { globalStyles, dimensions } from '../../globalStyles'
+import { globalStyles, dimensions } from '../../common/globalStyles'
 import { AppContext } from '../../../context/AppContext';
 import * as firebase from 'firebase';
 
@@ -392,7 +392,6 @@ export default class MealSyncCardsContainer extends Component {
   }
 
   render() {
-    // console.log('sanity check - room props', this.props.navigation)
 
     return (
 

@@ -6,7 +6,7 @@ import { Notifications } from 'expo';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions'
 
-import { globalStyles } from '../globalStyles'
+import { globalStyles } from '../common/globalStyles'
 
 const SignUpScreen = ({navigation}) => {
   const [email, setEmail] = useState('');

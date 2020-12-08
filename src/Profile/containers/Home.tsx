@@ -1,17 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
   Paragraph,
-  Title,
-  Divider,
   Headline,
-  Text,
-  Button,
   Surface
 } from 'react-native-paper'
-import * as firebase from 'firebase'
 
-import { globalStyles } from '../../globalStyles';
+import SignOutButton from '../../common/SignOutButton';
+import { globalStyles } from '../../common/globalStyles';
 import { AppContext } from '../../../context/AppContext';
 
 const Home = (props) => {
@@ -26,6 +22,7 @@ const Home = (props) => {
 
   return (
     <View style={globalStyles.container}>
+    <SignOutButton navigation={props.navigation}/>
       <View style={globalStyles.dividerDiv}>
         <Headline> Home </Headline>
       </View>
