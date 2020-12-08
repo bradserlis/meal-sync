@@ -18,6 +18,7 @@ import * as firebase from 'firebase';
 import * as Location from 'expo-location';
 
 import { globalStyles, dimensions } from '../../common/globalStyles'
+import SignOutButton from '../../common/SignOutButton';
 import MealSyncResultsContainerContainer from './MealSyncResultsContainer';
 import MealSyncCardsContainer from './MealSyncCardsContainer';
 import { AppContext } from '../../../context/AppContext';
@@ -192,6 +193,7 @@ const MealSync = ({ navigation }) => {
 
   return (
     <View style={globalStyles.container}>
+      <SignOutButton navigation={navigation}/>
       <View style={globalStyles.dividerDiv}>
         <Headline> Meal Sync </Headline>
       </View>

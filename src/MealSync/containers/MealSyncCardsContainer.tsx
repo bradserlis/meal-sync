@@ -392,7 +392,6 @@ export default class MealSyncCardsContainer extends Component {
   }
 
   render() {
-    // console.log('sanity check - room props', this.props.navigation)
 
     return (
 
