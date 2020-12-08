@@ -8,7 +8,7 @@ import * as Permissions from 'expo-permissions';
 
 import authContext from '../../App';
 import Landing from '../Landing/Landing';
-import { globalStyles } from '../globalStyles';
+import { globalStyles } from '../common/globalStyles';
 
 const SignInScreen = ({navigation}) => {
 

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Paragraph, Title, Headline, Button } from 'react-native-paper';
 
 import MealSyncResults from '../components/MealSyncResults';
-import { globalStyles } from '../../globalStyles';
+import { globalStyles } from '../../common/globalStyles';
 import * as firebase from 'firebase';
 import { AppContext } from '../../../context/AppContext';
 
