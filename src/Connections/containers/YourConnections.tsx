@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Paragraph, Title, Headline } from 'react-native-paper';
 
-import { globalStyles, dimensions } from '../../globalStyles'
+import { globalStyles, dimensions } from '../../common/globalStyles'
 import ConnectionCard from '../components/ConnectionCard';
 
 const YourConnections = ({connections}) => {

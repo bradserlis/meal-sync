@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Paragraph, Title, Headline, Button } from 'react-native-paper';
 
-import { globalStyles } from '../../globalStyles';
+import { globalStyles } from '../../common/globalStyles';
 
 const MealSyncResults = (props) => {
 
