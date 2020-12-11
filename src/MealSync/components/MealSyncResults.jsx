@@ -3,13 +3,15 @@ import { View } from 'react-native';
 import { Paragraph, Title, Headline, Button } from 'react-native-paper';
 
 import { globalStyles } from '../../common/globalStyles';
+import ClearMealSyncButton from './ClearMealSyncButton';
+
 
 const MealSyncResults = (props) => {
 
     if (!props.results) {
         return (
             <View style={{ display: 'flex', flex: 1, alignSelf: 'center', justifyContent: 'center' }}>
-                <Title> They aren't done </Title>
+                <Title> One or more users have not finished </Title>
             </View>
         )
     } else if (props.results.length) {
@@ -18,15 +20,17 @@ const MealSyncResults = (props) => {
                 <Title>Results for Everyone</Title>
                 {
                     props.results.map((restaurant, i) => {
-                        return <Paragraph key={i}>{restaurant}</Paragraph>
+                        return <Paragraph key={i}> <Paragraph style={{fontWeight: 'bold'}}> -{restaurant} </Paragraph></Paragraph>
                     })
                 }
+                <Paragraph style={{marginTop: 10, marginBottom: 10 }}>In order to be able to create a new Meal Sync, you will need to clear these results. Press the Clear button below when you are finished with these results </Paragraph> 
+                <ClearMealSyncButton mealSyncRoomId={props.mealSyncRoomId}/>
             </View>
         )
     }
     else if (!props.results.length) {
         return <View>
-            <Title> They could not agree </Title>
+            <Title> Meal Sync is complete -- but there were no agreements! </Title>
         </View>
     }
 }

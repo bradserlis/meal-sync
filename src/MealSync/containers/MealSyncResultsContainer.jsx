@@ -10,6 +10,7 @@ import { AppContext } from '../../../context/AppContext';
 const MealSyncResultsContainer = ({ navigation }) => {
     const { currentUserObject } = useContext(AppContext);
     const [mealSyncObject, setMealSyncObject] = useState({})
+    const [mealSyncKey, setMealSyncKey] = useState('');
     const [results, setResults] = useState([])
     const [incompleteResults, setIncompleteResults] = useState(true);
 
@@ -57,6 +58,7 @@ const MealSyncResultsContainer = ({ navigation }) => {
             }
             return aggregateRestaurantVotes;
         })
+        setMealSyncKey(mealSyncObject.key)
         let restarauntNames = Object.keys(aggregateRestaurantVotes);
         let restaurantPicks = restarauntNames.filter(restaurantName => aggregateRestaurantVotes[restaurantName])
         setResults(restaurantPicks)
@@ -75,7 +77,7 @@ const MealSyncResultsContainer = ({ navigation }) => {
                 >
                     Check Results
                 </Button>
-                <MealSyncResults results={results} />
+                <MealSyncResults results={results} mealSyncRoomId={mealSyncKey} />
                 <View style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end' }}>
                         <Button
