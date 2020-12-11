@@ -63,6 +63,12 @@ const MealSyncResultsContainer = ({ navigation }) => {
         let restaurantPicks = restarauntNames.filter(restaurantName => aggregateRestaurantVotes[restaurantName])
         setResults(restaurantPicks)
     }
+
+    const clearMealSync = () => {
+        firebase.database().ref('mealsync-groups').child(mealSyncKey).remove().then(() => {
+            navigation.navigate('MealSync');
+        })
+    }
     
     return (
         <View>
@@ -77,7 +83,7 @@ const MealSyncResultsContainer = ({ navigation }) => {
                 >
                     Check Results
                 </Button>
-                <MealSyncResults results={results} mealSyncRoomId={mealSyncKey} />
+                <MealSyncResults clearMealSync={clearMealSync} results={results} mealSyncRoomId={mealSyncKey} />
                 <View style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end' }}>
                         <Button

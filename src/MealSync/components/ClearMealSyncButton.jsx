@@ -6,14 +6,14 @@ import * as firebase from 'firebase'
 
 const ClearMealSyncButton = (props) => {
 
-    const getMealSyncRoomQuery = () => firebase.database().ref('mealsync-groups').child(props.mealSyncRoomId).once('value')
-
     return(
         <View>
             <Button
             mode='contained'
+            color='red'
+            onPress={props.clearMealSync}
             >
-            Clear this MealSync {props.mealSyncRoomId}
+            Clear this MealSync
             </Button>
         </View>
     )
