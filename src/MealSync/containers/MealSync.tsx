@@ -18,7 +18,7 @@ import {
 import * as firebase from 'firebase';
 import * as Location from 'expo-location';
 
-import { globalStyles, dimensions } from '../../common/globalStyles'
+import { globalStyles, dimensions, colors } from '../../common/globalStyles'
 import SignOutButton from '../../common/SignOutButton';
 import MealSyncResultsContainerContainer from './MealSyncResultsContainer';
 import MealSyncCardsContainer from './MealSyncCardsContainer';
@@ -264,7 +264,7 @@ const MealSync = ({ navigation }) => {
 const styles = StyleSheet.create({
   buttonStyle: {
     width: dimensions.fullWidth / 2.5,
-    backgroundColor: 'rgb(0,120,220)',
+    backgroundColor: colors.DARK_BLUE,
     height: 300,
     justifyContent: 'center',
     alignSelf: 'center',

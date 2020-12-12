@@ -14,6 +14,11 @@ export const fonts = {
   lg: 28,
 }
 
+export const colors = {
+  DARK_BLUE: 'rgb(0,120,220)',
+  DARK_GREY: '#494949',
+}
+
 export const dimensions = {
   fullHeight: Dimensions.get('window').height,
   fullWidth: Dimensions.get('window').width

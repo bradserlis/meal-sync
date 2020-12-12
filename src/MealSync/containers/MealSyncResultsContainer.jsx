@@ -9,7 +9,7 @@ Dialog,
 Portal } from 'react-native-paper';
 
 import MealSyncResults from '../components/MealSyncResults';
-import { globalStyles } from '../../common/globalStyles';
+import { globalStyles, colors } from '../../common/globalStyles';
 import * as firebase from 'firebase';
 import { AppContext } from '../../../context/AppContext';
 
@@ -79,6 +79,10 @@ const MealSyncResultsContainer = ({ navigation }) => {
             navigation.navigate('MealSync');
         })
     }
+
+    const checkCompletedMealSync = () => {
+        results ? toggleShowDialog() : navigation.navigate('MealSync')
+    }
     
     return (
         <View>
@@ -99,7 +103,7 @@ const MealSyncResultsContainer = ({ navigation }) => {
                         <Button
                             style={{ display: 'flex', alignSelf: 'center', alignItems: 'center' }}
                             mode='contained'
-                            onPress={() => navigation.navigate('MealSync')}
+                            onPress={checkCompletedMealSync}
                         >
                             Go Back
                         </Button>
@@ -110,10 +114,10 @@ const MealSyncResultsContainer = ({ navigation }) => {
                             <>
                                 <Dialog.Title>Remove Meal Sync Results?</Dialog.Title>
                                 <Dialog.Content>
-                                    <Paragraph>In order to be able to create a new Meal Sync, you will need to clear these results. Press the <Paragraph style={{fontWeight: 'bold'}}>Clear Results </Paragraph>button below if you are finished with these results </Paragraph>
+                                    <Paragraph>In order to be able to create a new Meal Sync, you will need to clear these results. Press the <Paragraph style={{fontWeight: 'bold'}}>Clear Results </Paragraph>button below if you are finished with these results.</Paragraph>
                                 </Dialog.Content>
                                 <Dialog.Actions>
-                                    <Button style={{margin: 5}} mode={'outlined'} onPress={null}>Clear Results</Button>
+                                    <Button style={{margin: 5}} mode={'contained'} color='orange' labelStyle={{color: colors.DARK_GREY, fontWeight: 'bold' }} onPress={clearMealSync}>Clear Results</Button>
                                     <Button style={{margin: 5}} mode={'outlined'} onPress={() => navigation.navigate('MealSync')}>Keep Results</Button>
                                 </Dialog.Actions>
                             </>
