@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { Paragraph, Title, Headline, Button } from 'react-native-paper';
 
 import { globalStyles } from '../../common/globalStyles';
-import ClearMealSyncButton from './ClearMealSyncButton';
 
 
 const MealSyncResults = (props) => {
@@ -23,8 +22,6 @@ const MealSyncResults = (props) => {
                         return <Paragraph key={i}> <Paragraph style={{fontWeight: 'bold'}}> -{restaurant} </Paragraph></Paragraph>
                     })
                 }
-                <Paragraph style={{marginTop: 10, marginBottom: 10 }}>In order to be able to create a new Meal Sync, you will need to clear these results. Press the Clear button below when you are finished with these results </Paragraph> 
-                <ClearMealSyncButton toggleShowDialog={props.toggleShowDialog} />
             </View>
         )
     }
