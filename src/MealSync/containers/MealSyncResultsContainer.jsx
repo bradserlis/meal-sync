@@ -114,7 +114,7 @@ const MealSyncResultsContainer = ({ navigation }) => {
                             <>
                                 <Dialog.Title>Remove Meal Sync Results?</Dialog.Title>
                                 <Dialog.Content>
-                                    <Paragraph>In order to be able to create a new Meal Sync, you will need to clear these results. Press the <Paragraph style={{fontWeight: 'bold'}}>Clear Results </Paragraph>button below if you are finished with these results </Paragraph>
+                                    <Paragraph>In order to be able to create a new Meal Sync, you will need to clear these results. Press the <Paragraph style={{fontWeight: 'bold'}}>Clear Results </Paragraph>button below if you are finished with these results.</Paragraph>
                                 </Dialog.Content>
                                 <Dialog.Actions>
                                     <Button style={{margin: 5}} mode={'contained'} color='orange' labelStyle={{color: colors.DARK_GREY, fontWeight: 'bold' }} onPress={clearMealSync}>Clear Results</Button>
