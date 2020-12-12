@@ -3,6 +3,8 @@ import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as firebase from 'firebase';
 
+import { colors } from './globalStyles'
+
 const SignOutButton = ({navigation}) => {
     
     const handleClearExpoToken = () => {
@@ -23,7 +25,7 @@ const SignOutButton = ({navigation}) => {
 
     return(
     <Button
-        style={{display: 'flex', alignSelf: 'left'}}
+        style={{display: 'flex', alignSelf: 'left', backgroundColor: colors.ICON_BLUE}}
         labelStyle={{fontSize: 8}}
         mode='contained'
         compact={true}

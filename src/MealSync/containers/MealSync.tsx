@@ -236,20 +236,13 @@ const MealSync = ({ navigation }) => {
       </Portal>
       <View style={{ display: 'flex', flex: 1 }}>
         <View style={{ flex: 1, minWidth: dimensions.fullWidth, justifyContent: 'center', alignSelf: 'center' }}>
-          <Surface
-            style={{backgroundColor: colors.DARK_BLUE}}
-          >
           <TouchableOpacity
             onPress={shouldShowDialogCheck}
             style={styles.buttonStyle}
           >
             <MaterialCommunityIcons name="food" size={50} color="white" />
-            <Title style={styles.buttonTextStyle}>Meal Syncing Together</Title>
+            <Title style={styles.buttonTextStyle}>Start Meal Syncing</Title>
           </TouchableOpacity>
-          </Surface>
-          <Surface
-
-          >
           <TouchableOpacity
             style={styles.buttonStyle}
             onPress={() => navigation.navigate('MealSyncResultsContainer')}
@@ -257,7 +250,6 @@ const MealSync = ({ navigation }) => {
             <Foundation name="clipboard-notes" size={40} color="white" style={{paddingTop: 6}}/>
             <Title style={styles.buttonTextStyle}> Previous Results </Title>
           </TouchableOpacity>
-          </Surface>
           <Snackbar
             visible={showSnackbar}
             onDismiss={snackbarToggle}
@@ -273,17 +265,15 @@ const MealSync = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    width: dimensions.fullWidth / .25,
+    width: dimensions.fullWidth / 1.1,
     marginBottom: 10,
     marginTop: 10,
     paddingVertical: 10,
-    backgroundColor: 'rgb(0,120,220)',
+    backgroundColor: colors.PURPLE,
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: 'rgb(255, 240, 240)'
+    borderRadius: 10
   },
   buttonTextStyle: {
     color: 'rgb(240, 240, 240)',
