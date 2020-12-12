@@ -24,7 +24,7 @@ const MealSyncResults = (props) => {
                     })
                 }
                 <Paragraph style={{marginTop: 10, marginBottom: 10 }}>In order to be able to create a new Meal Sync, you will need to clear these results. Press the Clear button below when you are finished with these results </Paragraph> 
-                <ClearMealSyncButton clearMealSync={props.clearMealSync} mealSyncRoomId={props.mealSyncRoomId} />
+                <ClearMealSyncButton toggleShowDialog={props.toggleShowDialog} />
             </View>
         )
     }
