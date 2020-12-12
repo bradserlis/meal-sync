@@ -205,6 +205,13 @@ const MealSync = ({ navigation }) => {
       <View style={globalStyles.dividerDiv}>
         <Headline> Meal Sync </Headline>
       </View>
+      <Snackbar
+            visible={showSnackbar}
+            onDismiss={snackbarToggle}
+            duration={2000}
+          >
+          Meal Sync results found!
+      </Snackbar>
       <Portal>
         <Dialog style={{ width: dimensions.fullWidth / 1.1, height: dimensions.fullHeight / 1.3 }} visible={showDialog} onDismiss={hideDialog}>
           <Dialog.Title> Select Connections for this group </Dialog.Title>
@@ -250,13 +257,6 @@ const MealSync = ({ navigation }) => {
             <Foundation name="clipboard-notes" size={40} color="white" style={{paddingTop: 6}}/>
             <Title style={styles.buttonTextStyle}> Previous Results </Title>
           </TouchableOpacity>
-          <Snackbar
-            visible={showSnackbar}
-            onDismiss={snackbarToggle}
-            duration={2500}
-          >
-          Meal Sync in progress!
-          </Snackbar>
         </View>
       </View>
     </View>
