@@ -12,7 +12,8 @@ import {
   Button,
   Surface,
   Portal,
-  Dialog
+  Dialog,
+  Snackbar
 } from 'react-native-paper';
 import * as firebase from 'firebase';
 import * as Location from 'expo-location';
@@ -34,6 +35,7 @@ const MealSync = ({ navigation }) => {
 
   const { currentUserObject } = useContext(AppContext);
   const [showDialog, setShowDialog] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const [groupList, setGroupList] = useState([]);
   const [connectionCards, setConnectionCards] = useState([])
@@ -59,6 +61,11 @@ const MealSync = ({ navigation }) => {
 
   const hideDialog = () => setShowDialog(false)
   const openDialog = () => setShowDialog(true)
+
+  const snackbarToggle = () => {
+    navigation.navigate('MealSyncResultsContainer')
+    setShowSnackbar(!showSnackbar)
+  }
 
   const resetDialog = () => {
     retrieveConnections();
@@ -116,8 +123,7 @@ const MealSync = ({ navigation }) => {
       navigation.navigate('MealSyncCardsContainer', {room: room})
     } else {
       // user already has results on room object -- move to results screen
-      alert('already finished this meal sync');
-      navigation.navigate('MealSyncResultsContainer');
+      setShowSnackbar(true);
     };
   };
 
@@ -242,6 +248,13 @@ const MealSync = ({ navigation }) => {
             <Title style={[styles.buttonTextStyle, styles.buttonTextEmphasisStyle]}>See</Title>
             <Title style={styles.buttonTextStyle}> Previous Results </Title>
           </TouchableOpacity>
+          <Snackbar
+            visible={showSnackbar}
+            onDismiss={snackbarToggle}
+            duration={2500}
+          >
+          Meal Sync in progress!
+          </Snackbar>
         </View>
       </View>
     </View>
