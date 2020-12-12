@@ -17,6 +17,8 @@ import {
 } from 'react-native-paper';
 import * as firebase from 'firebase';
 import * as Location from 'expo-location';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Foundation } from '@expo/vector-icons';
 
 import { globalStyles, dimensions, colors } from '../../common/globalStyles'
 import SignOutButton from '../../common/SignOutButton';
@@ -203,6 +205,13 @@ const MealSync = ({ navigation }) => {
       <View style={globalStyles.dividerDiv}>
         <Headline> Meal Sync </Headline>
       </View>
+      <Snackbar
+            visible={showSnackbar}
+            onDismiss={snackbarToggle}
+            duration={2000}
+          >
+          Meal Sync results found!
+      </Snackbar>
       <Portal>
         <Dialog style={{ width: dimensions.fullWidth / 1.1, height: dimensions.fullHeight / 1.3 }} visible={showDialog} onDismiss={hideDialog}>
           <Dialog.Title> Select Connections for this group </Dialog.Title>
@@ -233,28 +242,21 @@ const MealSync = ({ navigation }) => {
         </Dialog>
       </Portal>
       <View style={{ display: 'flex', flex: 1 }}>
-        <View style={{ flex: 1, padding: 20, minWidth: dimensions.fullWidth / 2, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ flex: 1, minWidth: dimensions.fullWidth, justifyContent: 'center', alignSelf: 'center' }}>
           <TouchableOpacity
             onPress={shouldShowDialogCheck}
             style={styles.buttonStyle}
           >
-            <Title style={[styles.buttonTextStyle, styles.buttonTextEmphasisStyle]}>Start</Title>
-            <Title style={styles.buttonTextStyle}>Meal Syncing Together</Title>
+            <MaterialCommunityIcons name="food" size={50} color="white" />
+            <Title style={styles.buttonTextStyle}>Start Meal Syncing</Title>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyle}
             onPress={() => navigation.navigate('MealSyncResultsContainer')}
           >
-            <Title style={[styles.buttonTextStyle, styles.buttonTextEmphasisStyle]}>See</Title>
+            <Foundation name="clipboard-notes" size={40} color="white" style={{paddingTop: 6}}/>
             <Title style={styles.buttonTextStyle}> Previous Results </Title>
           </TouchableOpacity>
-          <Snackbar
-            visible={showSnackbar}
-            onDismiss={snackbarToggle}
-            duration={2500}
-          >
-          Meal Sync in progress!
-          </Snackbar>
         </View>
       </View>
     </View>
@@ -263,24 +265,23 @@ const MealSync = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    width: dimensions.fullWidth / 2.5,
-    backgroundColor: colors.DARK_BLUE,
-    height: 300,
+    width: dimensions.fullWidth / 1.1,
+    marginBottom: 10,
+    marginTop: 10,
+    paddingVertical: 10,
+    backgroundColor: colors.PURPLE,
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: 'rgb(255, 240, 240)'
+    borderRadius: 10
   },
   buttonTextStyle: {
-    padding: 10,
     color: 'rgb(240, 240, 240)',
     textAlign: 'center',
     fontSize: 25
   },
   buttonTextEmphasisStyle: {
-    color: 'black',
+    color: 'white',
   },
   centered: {
     display: 'flex',
