@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
-import { Paragraph, Title, Headline, Button } from 'react-native-paper';
+import {
+Paragraph,
+Title,
+Headline,
+Button, 
+Dialog, 
+Portal } from 'react-native-paper';
 
 import MealSyncResults from '../components/MealSyncResults';
 import { globalStyles } from '../../common/globalStyles';
@@ -13,10 +19,14 @@ const MealSyncResultsContainer = ({ navigation }) => {
     const [mealSyncKey, setMealSyncKey] = useState('');
     const [results, setResults] = useState([])
     const [incompleteResults, setIncompleteResults] = useState(true);
+    const [showDialog, setShowDialog] = useState(false)
 
     useEffect(() => {
         setMealSyncResults();
     }, []);
+
+    let toggleShowDialog = () => setShowDialog(!showDialog)
+      
     
     const getMealSyncQuery = () => {
         return firebase
@@ -83,7 +93,7 @@ const MealSyncResultsContainer = ({ navigation }) => {
                 >
                     Check Results
                 </Button>
-                <MealSyncResults clearMealSync={clearMealSync} results={results} mealSyncRoomId={mealSyncKey} />
+                <MealSyncResults toggleShowDialog={toggleShowDialog} results={results} />
                 <View style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end' }}>
                         <Button
@@ -95,6 +105,20 @@ const MealSyncResultsContainer = ({ navigation }) => {
                         </Button>
                     </View>
                 </View>
+                <Portal>
+                    <Dialog visible={showDialog} onDismiss={toggleShowDialog}>
+                            <>
+                                <Dialog.Title>Remove Meal Sync Results?</Dialog.Title>
+                                <Dialog.Content>
+                                    <Paragraph>In order to be able to create a new Meal Sync, you will need to clear these results. Press the <Paragraph style={{fontWeight: 'bold'}}>Clear Results </Paragraph>button below if you are finished with these results </Paragraph>
+                                </Dialog.Content>
+                                <Dialog.Actions>
+                                    <Button style={{margin: 5}} mode={'outlined'} onPress={null}>Clear Results</Button>
+                                    <Button style={{margin: 5}} mode={'outlined'} onPress={() => navigation.navigate('MealSync')}>Keep Results</Button>
+                                </Dialog.Actions>
+                            </>
+                    </Dialog>
+                </Portal>
             </View>
         </View>
     )

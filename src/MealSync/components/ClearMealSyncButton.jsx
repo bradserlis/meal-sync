@@ -11,7 +11,7 @@ const ClearMealSyncButton = (props) => {
             <Button
             mode='contained'
             color='red'
-            onPress={props.clearMealSync}
+            onPress={props.toggleShowDialog}
             >
             Clear this MealSync
             </Button>
