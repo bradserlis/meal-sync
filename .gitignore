@@ -1,7 +1,5 @@
 .env
 
-functions/node_modules/*
-
 tsconfig.json
 babel.config.js
 .expo

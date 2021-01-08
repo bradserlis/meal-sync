@@ -2,7 +2,9 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, Headline} from 'react-native-paper';
 
-import * as firebase from 'firebase';
+import firebase from "firebase/app"
+import 'firebase/auth';
+import 'firebase/database';
 
 import SignInScreen from '../Navigation/SignInScreen';
 import SignUpScreen from '../Navigation/SignUpScreen';
