@@ -23,9 +23,7 @@ const Connections = ({ navigation }) => {
     retrieveConnections();  
   }, [])
 
-  let toggleShowDialog = () => {
-    setShowDialog(!showDialog)
-  }
+  let toggleShowDialog = () => setShowDialog(!showDialog);
 
   let closeErrorDialog = () => {
     setShowDialog(!showDialog)
@@ -145,6 +143,3 @@ const Connections = ({ navigation }) => {
 }
 
 export default Connections;
-
-
-// look into updating connectionCards state, to force YourConnections component to re-render
