@@ -18,6 +18,9 @@ const db = admin.database();
 */
 
 exports.sendPushNotification = functions.database.ref('mealsync-groups/{mealSyncId}/results').onWrite(async (change, context) => {
+    if (!change.after.exists()) {
+        return null;
+      }
     const groupUsersSnapshot = await db.ref('mealsync-groups/'+ context.params.mealSyncId).child('users').get();
     const groupUserConnectionIds = Object.values(groupUsersSnapshot.val());
 
@@ -45,7 +48,8 @@ exports.sendPushNotification = functions.database.ref('mealsync-groups/{mealSync
               }
             return {
                 "to": expoPushToken,
-                "body": messageBody
+                "body": messageBody,
+                "data": {messageBody}
             }
         })
         console.log("SHOW ME THE MESSAGES => ", messages);
