@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Keyboard, Platform } from 'react-native';
 import { Text, Headline, TextInput, Button, Paragraph, Portal, Dialog } from 'react-native-paper';
 import * as firebase from 'firebase';
@@ -6,9 +6,11 @@ import { Notifications } from 'expo';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions'
 
-import { globalStyles } from '../common/globalStyles'
+import { globalStyles } from '../common/globalStyles';
+import { AppContext } from '../../context/AppContext';
 
 const SignUpScreen = ({navigation}) => {
+  const { localNotificationsListenerActive, activateLocalNotifications } = useContext(AppContext);
   const [email, setEmail] = useState('');
   const [displayName, setDisplayName] = useState('')
   const [password, setPassword] = useState('');
@@ -16,7 +18,6 @@ const SignUpScreen = ({navigation}) => {
   const [dialogMessage, setDialogMessage] = useState('')
   const [expoPushToken, setExpoPushToken] = useState('')
 
-  const showDialog = () => setDialogVisibility(true);
   const hideDialog = () => setDialogVisibility(false);
 
   useEffect(() => {
@@ -42,6 +43,22 @@ const SignUpScreen = ({navigation}) => {
       setExpoPushToken(token);
     } else {
       alert('Must use physical device for Push Notifications');
+    }
+
+    if(!localNotificationsListenerActive){
+      console.log(localNotificationsListenerActive, 'so setting now')
+      Notifications.addListener((notification) => {
+        if(notification.data.messageBody){
+          Notifications.presentLocalNotificationAsync(
+            {
+              ios: {_displayInForeground:true},
+              title: 'MealSync',
+              body: notification.data.messageBody
+            }
+          )
+        };
+      });
+      activateLocalNotifications();
     }
   
     if (Platform.OS === 'android') {
