@@ -7,6 +7,7 @@ const AppContext = createContext();
 const AppContextProvider = ({ children }) => {
   
   const [currentUserObject, setCurrentUserObject] = useState({});
+  const [localNotificationsListenerActive, setLocalNotificationsListenerActive] = useState(false);
   
   const retrieveUserFromDB = () => {
     let currentUserId = firebase.auth().currentUser.uid;
@@ -17,9 +18,13 @@ const AppContextProvider = ({ children }) => {
     })
   }
 
+  const activateLocalNotifications = () => setLocalNotificationsListenerActive(true);
+  
   const defaultContext = {
     currentUserObject,
-    retrieveUserFromDB
+    retrieveUserFromDB,
+    activateLocalNotifications,
+    localNotificationsListenerActive,
   };
   
   return (
