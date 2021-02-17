@@ -2,74 +2,19 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Keyboard, Platform } from 'react-native';
 import { Text, Headline, TextInput, Button, Paragraph, Portal, Dialog } from 'react-native-paper';
 import * as firebase from 'firebase';
-import { Notifications } from 'expo';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions'
 
 import { globalStyles } from '../common/globalStyles';
 import { AppContext } from '../../context/AppContext';
 
 const SignUpScreen = ({navigation}) => {
-  const { localNotificationsListenerActive, activateLocalNotifications } = useContext(AppContext);
+  const { expoPushToken } = useContext(AppContext);
   const [email, setEmail] = useState('');
-  const [displayName, setDisplayName] = useState('')
+  const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
-  const [dialogVisibility, setDialogVisibility] = useState(false)
-  const [dialogMessage, setDialogMessage] = useState('')
-  const [expoPushToken, setExpoPushToken] = useState('')
+  const [dialogVisibility, setDialogVisibility] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
 
   const hideDialog = () => setDialogVisibility(false);
-
-  useEffect(() => {
-    const runRegister = async () => {
-      registerForPushNotificationsAsync();
-    }
-    runRegister()
-  }, [])
-
-  const registerForPushNotificationsAsync = async () => {
-    if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {        
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
-      }
-      const token = await Notifications.getExpoPushTokenAsync();
-      setExpoPushToken(token);
-    } else {
-      alert('Must use physical device for Push Notifications');
-    }
-
-    if(!localNotificationsListenerActive){
-      console.log(localNotificationsListenerActive, 'so setting now')
-      Notifications.addListener((notification) => {
-        if(notification.data.messageBody){
-          Notifications.presentLocalNotificationAsync(
-            {
-              ios: {_displayInForeground:true},
-              title: 'MealSync',
-              body: notification.data.messageBody
-            }
-          )
-        };
-      });
-      activateLocalNotifications();
-    }
-  
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-  };
 
   let createConnectionId = (userid) => {
     var hash = 0, i, chr;
@@ -84,15 +29,10 @@ const SignUpScreen = ({navigation}) => {
   }
 
   const onSubmit = async () => {
-
-    let userObj = {
-      email,
-      password,
-    }
+    let userObj = { email, password };
 
     try {
       firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password).then((result) => {
-        registerForPushNotificationsAsync();
         firebase.auth().currentUser.updateProfile({
           displayName
         }).catch(function(error) {
@@ -133,38 +73,38 @@ const SignUpScreen = ({navigation}) => {
     }
   }
 
-    return(
-      <View style={[globalStyles.container, globalStyles.flexed]}>
-        <Headline>Sign Up</Headline>
-        <TextInput
-          label='Enter Email'
-          mode={'outlined'}
-          placeholder='Email'
-          value={email}
-          onChangeText={setEmail}
-          /> 
-        <TextInput
-          label='Enter a Display Name'
-          mode={'outlined'}
-          placeholder='Display Name'
-          value={displayName}
-          onChangeText={setDisplayName}
-          /> 
-        <TextInput
-          label='Enter a Password'
-          mode={'outlined'}
-          placeholder='Password'
-          value={password}
-          onChangeText={setPassword}
-          /> 
-        <Button
-          style={{marginTop: 10}}
-          mode={'contained'} 
-          onPress={onSubmit}
-        >
-        Sign Up
-        </Button>
-        <Portal>
+  return(
+    <View style={[globalStyles.container, globalStyles.flexed]}>
+      <Headline>Sign Up</Headline>
+      <TextInput
+        label='Enter Email'
+        mode={'outlined'}
+        placeholder='Email'
+        value={email}
+        onChangeText={setEmail}
+      /> 
+      <TextInput
+        label='Enter a Display Name'
+        mode={'outlined'}
+        placeholder='Display Name'
+        value={displayName}
+        onChangeText={setDisplayName}
+      /> 
+      <TextInput
+        label='Enter a Password'
+        mode={'outlined'}
+        placeholder='Password'
+        value={password}
+        onChangeText={setPassword}
+      /> 
+      <Button
+        style={{marginTop: 10}}
+        mode={'contained'} 
+        onPress={onSubmit}
+      >
+      Sign Up
+      </Button>
+      <Portal>
         <Dialog visible={dialogVisibility} onDismiss={hideDialog}>
           <Dialog.Title>Oops...</Dialog.Title>
           <Dialog.Content>
@@ -175,20 +115,20 @@ const SignUpScreen = ({navigation}) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-        <View style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
+      <View style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
         <View style={{display: 'flex', flex: 1, justifyContent: 'center', alignSelf: 'flex-end'}}>
-        <Button
-          style={{display: 'flex', alignSelf: 'center', alignItems: 'center'}}
-          mode='outlined'
-          dark={true}
-          onPress={() => navigation.navigate('Landing')}
-        >
-        Go Back
-        </Button>
+          <Button
+            style={{display: 'flex', alignSelf: 'center', alignItems: 'center'}}
+            mode='outlined'
+            dark={true}
+            onPress={() => navigation.navigate('Landing')}
+          >
+          Go Back
+          </Button>
         </View>
       </View>
     </View>
-    )
+  )
 }
 
 export default SignUpScreen;
