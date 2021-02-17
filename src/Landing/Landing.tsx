@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Button, Headline} from 'react-native-paper';
-
+import { Text, Button, Headline } from 'react-native-paper';
 import firebase from "firebase/app"
 import 'firebase/auth';
 import 'firebase/database';
@@ -9,8 +8,18 @@ import 'firebase/database';
 import SignInScreen from '../Navigation/SignInScreen';
 import SignUpScreen from '../Navigation/SignUpScreen';
 import { globalStyles, dimensions } from '../common/globalStyles'
+import { AppContext } from '../../context/AppContext';
 
 const Landing = ({navigation}) => {
+
+  useEffect( () => {
+    registerForPushNotificationsAsync()
+  }, [])
+
+  const { 
+    registerForPushNotificationsAsync,
+    expoPushToken 
+  } = useContext(AppContext);
 
   const handleDevSignIn = () => {
     firebase.auth().signInWithEmailAndPassword('anotherfake@abc.com', 'Password123').then( (result) => {
