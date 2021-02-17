@@ -3,7 +3,6 @@ import { View, Keyboard, Platform } from 'react-native';
 import { TextInput, Button, Headline, Portal, Dialog, Paragraph } from 'react-native-paper';
 import * as firebase from 'firebase';
 
-import authContext from '../../App';
 import Landing from '../Landing/Landing';
 import { globalStyles } from '../common/globalStyles';
 import { AppContext } from '../../context/AppContext';
