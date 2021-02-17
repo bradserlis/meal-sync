@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, FlatList, ScrollView, Keyboard } from 'react-native'
 import { Headline, Paragraph, Button, Title, Dialog, Portal, Text } from 'react-native-paper';
-import * as firebase from 'firebase'
+import * as firebase from 'firebase';
 
 import { globalStyles, dimensions } from '../../common/globalStyles';
 import SignOutButton from '../../common/SignOutButton';
@@ -11,7 +11,6 @@ import { AppContext } from '../../../context/AppContext';
 
 const Connections = ({ navigation }) => {
   const { currentUserObject, retrieveUserFromDB } = useContext(AppContext);
-
   const [connectionCards, setConnectionCards] = useState([])
   const [showDialog, setShowDialog] = useState(false)
   const [addConnectionDialog, setAddConnectionDialog] = useState(false)
