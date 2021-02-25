@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
 import { Image } from 'react-native';
 import { Title, Headline, Paragraph, Button } from 'react-native-paper';
 import { Container, Header, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body, Icon } from 'native-base';
@@ -394,24 +395,48 @@ export default class MealSyncCardsContainer extends Component {
   render() {
 
     return (
-
-      <View style={{
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center'
-      }}>
-        <View style={{ flex: 1, display: 'flex', height: dimensions.fullHeight / 2 }}>
-          <DeckSwiper
-            dataSource={this.state.nearbyResults}
-            looping={false}
-            renderItem={this.renderItem}
-            onSwipeRight={(item) => this.onSwipeRight(item.name)}
-            onSwipeLeft={(item) => this.onSwipeLeft(item.name)}
-            renderEmpty={this.handleFinishSwiping}
-          />
+        <View style={{
+          backgroundColor: 'blue',
+          display: 'flex',
+          flex: 1,
+        }}>
+        {/* within container view */}
+        <View style={{backgroundColor: 'yellow', display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center'}}> 
+          {/* within row view */}
+          <View style={[styles.ColorBarLeft, styles.ColorBar]}>
+          </View>
+            <View style={{ flex: 3, display: 'flex', height: dimensions.fullHeight / 2 }}>
+              <DeckSwiper
+                dataSource={this.state.nearbyResults}
+                looping={false}
+                renderItem={this.renderItem}
+                onSwipeRight={(item) => this.onSwipeRight(item.name)}
+                onSwipeLeft={(item) => this.onSwipeLeft(item.name)}
+                renderEmpty={this.handleFinishSwiping}
+                />
+            </View>
+            <View style={[styles.ColorBar, styles.ColorBarRight]}> 
+            </View>
+          </View>
         </View>
-      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  ColorBarLeft: {
+    backgroundColor: 'red', 
+    borderTopRightRadius: 30, 
+    borderBottomRightRadius: 30 
+  },
+  ColorBarRight: {
+    backgroundColor: 'blue',
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+  },
+  ColorBar: {
+    height: dimensions.fullHeight / 1.1,
+    display: 'flex',
+    flex: 1,
+  }
+});

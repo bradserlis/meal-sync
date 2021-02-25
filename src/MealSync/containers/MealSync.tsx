@@ -91,8 +91,6 @@ const MealSync = ({ navigation }) => {
     let dataObj = {};
     userRoomSnapshot.forEach((item) => {
       Object.assign(dataObj, item.val())
-      // firebase.database().ref('/mealsync-groups-historical/'+item.key).set(dataObj);
-      // removeFormerMealSyncFromDB(item.key);
     })
     return dataObj
   }
