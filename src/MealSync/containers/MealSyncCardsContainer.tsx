@@ -342,8 +342,8 @@ export default class MealSyncCardsContainer extends Component {
   renderItem = (item) => {
     if (item.vicinity) {
       return (
-        <View style={{ display: 'flex', flex: 1, alignSelf: 'center', justifyContent: 'center', alignContent: 'center', width: dimensions.fullWidth / 1.25 }}>
-          <Card style={{ elevation: 4, padding: 20, height: dimensions.fullHeight / 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ display: 'flex', flex: 3, alignSelf: 'center', justifyContent: 'center', alignContent: 'center', width: dimensions.fullWidth / 1.25 }}>
+          <Card style={{ elevation: 4, padding: 20, height: dimensions.fullHeight / 2, display: 'flex', flex: 3, justifyContent: 'center', alignItems: 'center' }}>
             <CardItem>
               <Thumbnail
                 source={{ uri: item.icon }} />
@@ -396,16 +396,15 @@ export default class MealSyncCardsContainer extends Component {
 
     return (
         <View style={{
-          backgroundColor: 'blue',
+          backgroundColor: 'orange',
           display: 'flex',
           flex: 1,
         }}>
         {/* within container view */}
         <View style={{backgroundColor: 'yellow', display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center'}}> 
           {/* within row view */}
-          <View style={[styles.ColorBarLeft, styles.ColorBar]}>
-          </View>
-            <View style={{ flex: 3, display: 'flex', height: dimensions.fullHeight / 2 }}>
+            <View style={[styles.ColorBarLeft, styles.ColorBar]} />          
+            <View style={{ backgroundColor: 'brown', flex: 3, display: 'flex', height: dimensions.fullHeight / 2 }}>
               <DeckSwiper
                 dataSource={this.state.nearbyResults}
                 looping={false}
@@ -415,8 +414,7 @@ export default class MealSyncCardsContainer extends Component {
                 renderEmpty={this.handleFinishSwiping}
                 />
             </View>
-            <View style={[styles.ColorBar, styles.ColorBarRight]}> 
-            </View>
+            <View style={[styles.ColorBar, styles.ColorBarRight]} /> 
           </View>
         </View>
     )
@@ -433,6 +431,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     borderTopLeftRadius: 30,
     borderBottomLeftRadius: 30,
+    zIndex: -1
   },
   ColorBar: {
     height: dimensions.fullHeight / 1.1,
