@@ -396,15 +396,17 @@ export default class MealSyncCardsContainer extends Component {
 
     return (
         <View style={{
-          backgroundColor: 'orange',
+          backgroundColor: '',
           display: 'flex',
           flex: 1,
         }}>
         {/* within container view */}
-        <View style={{backgroundColor: 'yellow', display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center'}}> 
+        <View style={{backgroundColor: '', display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center'}}> 
           {/* within row view */}
-            <View style={[styles.ColorBarLeft, styles.ColorBar]} />          
-            <View style={{ backgroundColor: 'brown', flex: 3, display: 'flex', height: dimensions.fullHeight / 2 }}>
+            <View style={[styles.ColorBarLeft, styles.ColorBar]}> 
+            <Text style={styles.TextBar}> No </Text>
+            </View>          
+            <View style={{ backgroundColor: '', flex: 3, display: 'flex', height: dimensions.fullHeight / 2 }}>
               <DeckSwiper
                 dataSource={this.state.nearbyResults}
                 looping={false}
@@ -414,7 +416,9 @@ export default class MealSyncCardsContainer extends Component {
                 renderEmpty={this.handleFinishSwiping}
                 />
             </View>
-            <View style={[styles.ColorBar, styles.ColorBarRight]} /> 
+            <View style={[styles.ColorBar, styles.ColorBarRight]}>
+            <Text style={[styles.TextBar, styles.TextBarRight]}> Yes </Text>
+            </View> 
           </View>
         </View>
     )
@@ -427,6 +431,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30, 
     borderBottomRightRadius: 30 
   },
+  TextBar: {
+    alignSelf: 'center', 
+    fontSize: 40, 
+    transform: [{ rotate: '-90deg'}]
+  },
+  TextBarRight: {
+    transform: [{rotate: '90deg'}]
+  },
   ColorBarRight: {
     backgroundColor: 'blue',
     borderTopLeftRadius: 30,
@@ -437,5 +449,6 @@ const styles = StyleSheet.create({
     height: dimensions.fullHeight / 1.1,
     display: 'flex',
     flex: 1,
+    justifyContent: 'center'
   }
 });
