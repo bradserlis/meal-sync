@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
 import { Image } from 'react-native';
 import { Title, Headline, Paragraph, Button } from 'react-native-paper';
 import { Container, Header, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body, Icon } from 'native-base';
@@ -341,8 +342,8 @@ export default class MealSyncCardsContainer extends Component {
   renderItem = (item) => {
     if (item.vicinity) {
       return (
-        <View style={{ display: 'flex', flex: 1, alignSelf: 'center', justifyContent: 'center', alignContent: 'center', width: dimensions.fullWidth / 1.25 }}>
-          <Card style={{ elevation: 4, padding: 20, height: dimensions.fullHeight / 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ display: 'flex', flex: 3, alignSelf: 'center', justifyContent: 'center', alignContent: 'center', width: dimensions.fullWidth / 1.25 }}>
+          <Card style={{ elevation: 4, padding: 20, height: dimensions.fullHeight / 2, display: 'flex', flex: 3, justifyContent: 'center', alignItems: 'center' }}>
             <CardItem>
               <Thumbnail
                 source={{ uri: item.icon }} />
@@ -394,24 +395,60 @@ export default class MealSyncCardsContainer extends Component {
   render() {
 
     return (
-
-      <View style={{
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center'
-      }}>
-        <View style={{ flex: 1, display: 'flex', height: dimensions.fullHeight / 2 }}>
-          <DeckSwiper
-            dataSource={this.state.nearbyResults}
-            looping={false}
-            renderItem={this.renderItem}
-            onSwipeRight={(item) => this.onSwipeRight(item.name)}
-            onSwipeLeft={(item) => this.onSwipeLeft(item.name)}
-            renderEmpty={this.handleFinishSwiping}
-          />
+        <View style={{
+          backgroundColor: '',
+          display: 'flex',
+          flex: 1,
+        }}>
+        {/* within container view */}
+        <View style={{backgroundColor: '', display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center'}}> 
+          {/* within row view */}
+            <View style={[styles.ColorBarLeft, styles.ColorBar]}> 
+            <Text style={styles.TextBar}> No </Text>
+            </View>          
+            <View style={{ backgroundColor: '', flex: 3, display: 'flex', height: dimensions.fullHeight / 2 }}>
+              <DeckSwiper
+                dataSource={this.state.nearbyResults}
+                looping={false}
+                renderItem={this.renderItem}
+                onSwipeRight={(item) => this.onSwipeRight(item.name)}
+                onSwipeLeft={(item) => this.onSwipeLeft(item.name)}
+                renderEmpty={this.handleFinishSwiping}
+                />
+            </View>
+            <View style={[styles.ColorBar, styles.ColorBarRight]}>
+            <Text style={[styles.TextBar, styles.TextBarRight]}> Yes </Text>
+            </View> 
+          </View>
         </View>
-      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  ColorBarLeft: {
+    backgroundColor: 'red', 
+    borderTopRightRadius: 30, 
+    borderBottomRightRadius: 30 
+  },
+  TextBar: {
+    alignSelf: 'center', 
+    fontSize: 40, 
+    transform: [{ rotate: '-90deg'}]
+  },
+  TextBarRight: {
+    transform: [{rotate: '90deg'}]
+  },
+  ColorBarRight: {
+    backgroundColor: 'blue',
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    zIndex: -1
+  },
+  ColorBar: {
+    height: dimensions.fullHeight / 1.1,
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center'
+  }
+});
